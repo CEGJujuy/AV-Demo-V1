@@ -13,7 +13,7 @@
             <div class="header-content">
                 <div class="robot-icon">🤖</div>
                 <h1>Asistente Virtual para Estudiantes</h1>
-                <p>Tu compañero de estudio inteligente</p>
+                <p>Tu compañero de estudio inteligente para todas las materias</p>
             </div>
         </header>
 
@@ -24,27 +24,77 @@
                         <div class="message-avatar">🤖</div>
                         <div class="message-content">
                             <div class="message-text">
-                                ¡Hola! Soy tu asistente virtual. Estoy aquí para ayudarte con tus estudios. 
-                                Puedes preguntarme sobre matemáticas, ciencias, historia, lengua, o pedirme consejos de estudio. ¡Empecemos!
+                                ¡Hola! Soy tu asistente virtual especializado en educación secundaria. 
+                                Puedo ayudarte con todas las materias: matemáticas, ciencias, historia, lengua, inglés, geografía, educación física y más. 
+                                ¡Usa los botones de materias o escribe tu pregunta directamente!
                             </div>
                             <div class="message-time" id="welcomeTime"></div>
                         </div>
                     </div>
                 </div>
 
+                <div class="subjects-grid">
+                    <h3 class="subjects-title">📚 Materias Disponibles</h3>
+                    <div class="subjects-buttons">
+                        <button class="subject-btn math" data-command="ayuda con matemáticas">
+                            <span class="subject-icon">🔢</span>
+                            <span class="subject-name">Matemáticas</span>
+                        </button>
+                        <button class="subject-btn science" data-command="ayuda con ciencias">
+                            <span class="subject-icon">🧪</span>
+                            <span class="subject-name">Ciencias</span>
+                        </button>
+                        <button class="subject-btn history" data-command="ayuda con historia">
+                            <span class="subject-icon">🏛️</span>
+                            <span class="subject-name">Historia</span>
+                        </button>
+                        <button class="subject-btn language" data-command="ayuda con lengua">
+                            <span class="subject-icon">📖</span>
+                            <span class="subject-name">Lengua</span>
+                        </button>
+                        <button class="subject-btn english" data-command="ayuda con inglés">
+                            <span class="subject-icon">🇺🇸</span>
+                            <span class="subject-name">Inglés</span>
+                        </button>
+                        <button class="subject-btn geography" data-command="ayuda con geografía">
+                            <span class="subject-icon">🌍</span>
+                            <span class="subject-name">Geografía</span>
+                        </button>
+                        <button class="subject-btn pe" data-command="ayuda con educación física">
+                            <span class="subject-icon">⚽</span>
+                            <span class="subject-name">Ed. Física</span>
+                        </button>
+                        <button class="subject-btn art" data-command="ayuda con arte">
+                            <span class="subject-icon">🎨</span>
+                            <span class="subject-name">Arte</span>
+                        </button>
+                        <button class="subject-btn music" data-command="ayuda con música">
+                            <span class="subject-icon">🎵</span>
+                            <span class="subject-name">Música</span>
+                        </button>
+                        <button class="subject-btn philosophy" data-command="ayuda con filosofía">
+                            <span class="subject-icon">🤔</span>
+                            <span class="subject-name">Filosofía</span>
+                        </button>
+                    </div>
+                </div>
+
                 <div class="quick-buttons">
-                    <button class="quick-btn" data-command="consejos de estudio">
-                        📚 Consejos de Estudio
-                    </button>
-                    <button class="quick-btn" data-command="necesito motivación">
-                        💪 Motivación
-                    </button>
-                    <button class="quick-btn" data-command="ayuda con matemáticas">
-                        🔢 Matemáticas
-                    </button>
-                    <button class="quick-btn" data-command="ayuda con ciencias">
-                        🧪 Ciencias
-                    </button>
+                    <h4 class="quick-title">⚡ Ayuda Rápida</h4>
+                    <div class="quick-buttons-grid">
+                        <button class="quick-btn study" data-command="consejos de estudio">
+                            📚 Consejos de Estudio
+                        </button>
+                        <button class="quick-btn motivation" data-command="necesito motivación">
+                            💪 Motivación
+                        </button>
+                        <button class="quick-btn exam" data-command="cómo preparar exámenes">
+                            📝 Preparar Exámenes
+                        </button>
+                        <button class="quick-btn time" data-command="organizar tiempo">
+                            ⏰ Organizar Tiempo
+                        </button>
+                    </div>
                 </div>
 
                 <div class="input-container">
@@ -52,7 +102,7 @@
                         <input 
                             type="text" 
                             id="messageInput" 
-                            placeholder="Escribe tu pregunta aquí..."
+                            placeholder="Escribe tu pregunta sobre cualquier materia..."
                             maxlength="500"
                         >
                         <button id="sendButton" class="send-btn">
