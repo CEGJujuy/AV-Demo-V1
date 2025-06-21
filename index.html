@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asistente Virtual - Estudiantes de Secundaria</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <div class="robot-icon">🤖</div>
+                <h1>Asistente Virtual para Estudiantes</h1>
+                <p>Tu compañero de estudio inteligente</p>
+            </div>
+        </header>
+
+        <main class="main">
+            <div class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message assistant-message">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-content">
+                            <div class="message-text">
+                                ¡Hola! Soy tu asistente virtual. Estoy aquí para ayudarte con tus estudios. 
+                                Puedes preguntarme sobre matemáticas, ciencias, historia, lengua, o pedirme consejos de estudio. ¡Empecemos!
+                            </div>
+                            <div class="message-time" id="welcomeTime"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-buttons">
+                    <button class="quick-btn" data-command="consejos de estudio">
+                        📚 Consejos de Estudio
+                    </button>
+                    <button class="quick-btn" data-command="necesito motivación">
+                        💪 Motivación
+                    </button>
+                    <button class="quick-btn" data-command="ayuda con matemáticas">
+                        🔢 Matemáticas
+                    </button>
+                    <button class="quick-btn" data-command="ayuda con ciencias">
+                        🧪 Ciencias
+                    </button>
+                </div>
+
+                <div class="input-container">
+                    <div class="input-wrapper">
+                        <input 
+                            type="text" 
+                            id="messageInput" 
+                            placeholder="Escribe tu pregunta aquí..."
+                            maxlength="500"
+                        >
+                        <button id="sendButton" class="send-btn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22,2 15,22 11,13 2,9 22,2"></polygon>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
