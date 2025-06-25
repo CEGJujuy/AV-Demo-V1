@@ -49,8 +49,11 @@ Seminario Final de Informática
 
 César Eduardo González  
 San Salvador de Jujuy, Argentina 
+
 Universidad Empresarial Siglo XXI
+
 Carrera: Licenciatura en Informática
+
 Legajo: VINF013326  
 Tutor: Leonardo Gabriel Gamboa
 
