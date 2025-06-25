@@ -1,36 +1,58 @@
-# Asistente Virtual para Estudiantes de Secundaria
+# Asistente Virtual Educativo para Estudiantes de Secundaria 🧠🎓
 
-## Características
+Este proyecto es un prototipo funcional de un **asistente virtual educativo** desarrollado en Python, diseñado especialmente para estudiantes de nivel secundario. El objetivo es acompañar al estudiante fuera del aula, respondiendo dudas frecuentes sobre materias como Matemáticas, Ciencias, Historia, Lengua y más, a través de una interfaz simple y amigable.
 
-- **Interfaz gráfica amigable** usando tkinter
-- **Sin dependencias externas** - solo usa librerías estándar de Python
-- **Ayuda en múltiples materias**: matemáticas, ciencias, historia, lengua
-- **Consejos de estudio** y motivación
-- **Botones de ayuda rápida** para acceso fácil
-- **Historial de chat** con timestamps
+## 📦 Requisitos del sistema
 
-## Cómo usar
+- Python 3.8 o superior
+- Sistema operativo Windows, Linux o MacOS
+- Librerías necesarias:
+  - `tkinter` (viene preinstalado en la mayoría de distribuciones de Python)
+  - `datetime`
+  - `random`
 
-1. Ejecuta el archivo `asistente_virtual.py`
-2. Escribe tus preguntas en el campo de texto
-3. Presiona Enter o el botón "Enviar"
-4. Usa los botones de ayuda rápida para temas específicos
+## ▶️ Cómo ejecutar
 
-## Ejemplos de preguntas
+1. Asegurate de tener Python instalado.
+2. Ejecutá el script `asistente_virtual_comentado.py` haciendo doble clic o desde consola:
+   ```bash
+   python asistente_virtual_comentado.py
+   ```
+3. Se abrirá una ventana donde podrás interactuar con el asistente.
 
-- "Ayuda con matemáticas"
-- "Consejos para estudiar"
-- "Necesito motivación"
-- "¿Cómo estudiar historia?"
-- "Ayuda con ciencias"
+## 💬 ¿Qué puede hacer el asistente?
 
-## Requisitos
+- Responder preguntas sobre materias escolares comunes.
+- Dar consejos de estudio y motivación.
+- Mostrar fecha y hora actual.
+- Ofrecer respuestas automáticas ante palabras clave.
 
-- Python 3.x (con tkinter incluido)
-- No requiere instalación de paquetes adicionales
+## 📌 Funcionalidades destacadas
 
-## Ejecución
+- Interfaz gráfica intuitiva (Tkinter)
+- Diccionario de palabras clave educativas
+- Botones de acceso rápido a temas frecuentes
+- Diseño modular fácil de mejorar o integrar con IA más avanzada
 
-```bash
-python asistente_virtual.py
-```
+## 📁 Archivos incluidos
+
+- `asistente_virtual_comentado.py`: código fuente comentado.
+- `Manual_Usuario_Asistente_Virtual.docx`: guía rápida de uso en formato A4.
+- `README.md`: este archivo, con toda la información básica del proyecto.
+
+## 🧪 Versión actual
+
+Versión 1.0 - Junio 2025  
+Este proyecto es parte de un trabajo final de grado para la Licenciatura en Informática (UNJu).
+
+## 👤 Autor
+
+César Eduardo González  
+San Salvador de Jujuy, Argentina  
+Legajo: VINF013326  
+Tutor: Leonardo Gabriel Gamboa
+
+---
+
+Este asistente está pensado como complemento, no como reemplazo de la enseñanza docente.
+
