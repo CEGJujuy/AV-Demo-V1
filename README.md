@@ -43,12 +43,14 @@ Este proyecto es un prototipo funcional de un **asistente virtual educativo** de
 ## 🧪 Versión actual
 
 Versión 1.0 - Junio 2025  
-Este proyecto es parte de un trabajo final de grado para la Licenciatura en Informática (Universidad Empresarial Siglo XXI).
+Seminario Final de Informática
 
 ## 👤 Autor
 
 César Eduardo González  
-San Salvador de Jujuy, Argentina  
+San Salvador de Jujuy, Argentina 
+Universidad Empresarial Siglo XXI
+Carrera: Licenciatura en Informática
 Legajo: VINF013326  
 Tutor: Leonardo Gabriel Gamboa
 
