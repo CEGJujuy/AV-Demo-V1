@@ -1,7 +1,5 @@
 # Asistente Virtual para Estudiantes de Secundaria
 
-Un chatbot simple y funcional diseñado específicamente para ayudar a estudiantes de secundaria con sus estudios.
-
 ## Características
 
 - **Interfaz gráfica amigable** usando tkinter
@@ -17,14 +15,6 @@ Un chatbot simple y funcional diseñado específicamente para ayudar a estudiant
 2. Escribe tus preguntas en el campo de texto
 3. Presiona Enter o el botón "Enviar"
 4. Usa los botones de ayuda rápida para temas específicos
-
-## Temas que maneja
-
-- **Matemáticas**: álgebra, geometría, aritmética
-- **Ciencias**: biología, química, física
-- **Historia**: eventos históricos y consejos de estudio
-- **Lengua**: literatura, escritura, lectura
-- **Consejos de estudio**: técnicas y motivación
 
 ## Ejemplos de preguntas
 
@@ -44,5 +34,3 @@ Un chatbot simple y funcional diseñado específicamente para ayudar a estudiant
 ```bash
 python asistente_virtual.py
 ```
-
-¡Perfecto para estudiantes que necesitan un compañero de estudio virtual!
