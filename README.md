@@ -29,21 +29,21 @@ Este proyecto es un prototipo funcional de un **asistente virtual educativo** de
 
 ## 📌 Funcionalidades destacadas
 
-- Interfaz gráfica intuitiva (Tkinter)
+- Interfaz gráfica intuitiva web y local (Tkinter)
 - Diccionario de palabras clave educativas
 - Botones de acceso rápido a temas frecuentes
-- Diseño modular fácil de mejorar o integrar con IA más avanzada
+- Diseño de fácil integración con IA más avanzada
 
 ## 📁 Archivos incluidos
 
 - `asistente_virtual_comentado.py`: código fuente comentado.
-- `Manual_Usuario_Asistente_Virtual.docx`: guía rápida de uso en formato A4.
+- `Manual_Usuario_Asistente_Virtual.docx`: guía rápida de uso.
 - `README.md`: este archivo, con toda la información básica del proyecto.
 
 ## 🧪 Versión actual
 
 Versión 1.0 - Junio 2025  
-Este proyecto es parte de un trabajo final de grado para la Licenciatura en Informática (UNJu).
+Este proyecto es parte de un trabajo final de grado para la Licenciatura en Informática (Universidad Empresarial Siglo XXI).
 
 ## 👤 Autor
 
@@ -53,6 +53,7 @@ Legajo: VINF013326
 Tutor: Leonardo Gabriel Gamboa
 
 ---
+## ⚠️ Nota Importante: 
 
-Este asistente está pensado como complemento, no como reemplazo de la enseñanza docente.
+Este asistente está planteado como complemento educativo, no como reemplazo de la enseñanza docente.
 
