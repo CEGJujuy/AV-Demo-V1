@@ -37,7 +37,7 @@ Este proyecto es un prototipo funcional de un **asistente virtual educativo** de
 ## 📁 Archivos incluidos
 
 - `asistente_virtual_comentado.py`: código fuente comentado.
-- `Manual_Usuario_Asistente_Virtual.docx`: guía rápida de uso.
+- `Manual_Usuario_Asistente_Virtual.pdf`: guía rápida de uso.
 - `README.md`: este archivo, con toda la información básica del proyecto.
 
 ## 🧪 Versión actual
