@@ -1,16 +1,19 @@
-import tkinter as tk
-from tkinter import scrolledtext, messagebox
-import random
-import datetime
+# Importamos las librerías necesarias
+import tkinter as tk  # Librería estándar para crear interfaces gráficas en Python
+from tkinter import scrolledtext, messagebox  # Widgets adicionales para texto con scroll y mensajes emergentes
+import random  # Para seleccionar respuestas al azar
+import datetime  # Para manejar la hora y fecha actual
 
+# Definimos la clase del asistente virtual
 class AsistenteVirtual:
     def __init__(self):
+        # Crear la ventana principal
         self.ventana = tk.Tk()
         self.ventana.title("Asistente Virtual - Estudiantes de Secundaria")
         self.ventana.geometry("600x500")
         self.ventana.configure(bg="#f0f0f0")
-        
-        # Base de conocimientos del asistente
+
+        # Diccionario de respuestas organizadas por categorías
         self.respuestas = {
             "saludo": [
                 "¡Hola! Soy tu asistente virtual. ¿En qué puedo ayudarte hoy?",
@@ -55,7 +58,8 @@ class AsistenteVirtual:
                 "¡Adiós! Sigue esforzándote, vas por buen camino."
             ]
         }
-        
+
+        # Diccionario que relaciona palabras clave con categorías
         self.palabras_clave = {
             "hola": "saludo",
             "buenos días": "saludo",
@@ -90,61 +94,36 @@ class AsistenteVirtual:
             "chau": "despedida",
             "bye": "despedida"
         }
-        
+
+        # Crear la interfaz gráfica
         self.crear_interfaz()
-        
+
     def crear_interfaz(self):
-        # Título
-        titulo = tk.Label(
-            self.ventana, 
-            text="🤖 Asistente Virtual para Estudiantes", 
-            font=("Arial", 16, "bold"),
-            bg="#f0f0f0",
-            fg="#2c3e50"
-        )
+        # Agregar título en la ventana
+        titulo = tk.Label(self.ventana, text="🤖 Asistente Virtual para Estudiantes", font=("Arial", 16, "bold"), bg="#f0f0f0", fg="#2c3e50")
         titulo.pack(pady=10)
-        
-        # Área de chat
-        self.area_chat = scrolledtext.ScrolledText(
-            self.ventana,
-            width=70,
-            height=20,
-            font=("Arial", 10),
-            bg="white",
-            fg="black",
-            state=tk.DISABLED
-        )
+
+        # Área donde se mostrará la conversación
+        self.area_chat = scrolledtext.ScrolledText(self.ventana, width=70, height=20, font=("Arial", 10), bg="white", fg="black", state=tk.DISABLED)
         self.area_chat.pack(padx=10, pady=5, fill=tk.BOTH, expand=True)
-        
+
         # Frame para entrada de texto y botón
         frame_entrada = tk.Frame(self.ventana, bg="#f0f0f0")
         frame_entrada.pack(fill=tk.X, padx=10, pady=5)
-        
-        # Campo de entrada
-        self.entrada_texto = tk.Entry(
-            frame_entrada,
-            font=("Arial", 12),
-            width=50
-        )
+
+        # Entrada para que el usuario escriba
+        self.entrada_texto = tk.Entry(frame_entrada, font=("Arial", 12), width=50)
         self.entrada_texto.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
         self.entrada_texto.bind("<Return>", self.enviar_mensaje)
-        
-        # Botón enviar
-        boton_enviar = tk.Button(
-            frame_entrada,
-            text="Enviar",
-            font=("Arial", 10, "bold"),
-            bg="#3498db",
-            fg="white",
-            command=self.enviar_mensaje,
-            cursor="hand2"
-        )
+
+        # Botón para enviar el mensaje
+        boton_enviar = tk.Button(frame_entrada, text="Enviar", font=("Arial", 10, "bold"), bg="#3498db", fg="white", command=self.enviar_mensaje, cursor="hand2")
         boton_enviar.pack(side=tk.RIGHT)
-        
-        # Frame para botones de ayuda rápida
+
+        # Frame para botones rápidos
         frame_botones = tk.Frame(self.ventana, bg="#f0f0f0")
         frame_botones.pack(fill=tk.X, padx=10, pady=5)
-        
+
         # Botones de ayuda rápida
         botones_ayuda = [
             ("📚 Consejos de Estudio", "consejos de estudio"),
@@ -152,84 +131,57 @@ class AsistenteVirtual:
             ("🔢 Matemáticas", "ayuda con matemáticas"),
             ("🧪 Ciencias", "ayuda con ciencias")
         ]
-        
         for texto, comando in botones_ayuda:
-            boton = tk.Button(
-                frame_botones,
-                text=texto,
-                font=("Arial", 8),
-                bg="#ecf0f1",
-                fg="#2c3e50",
-                command=lambda cmd=comando: self.procesar_comando_rapido(cmd),
-                cursor="hand2"
-            )
+            boton = tk.Button(frame_botones, text=texto, font=("Arial", 8), bg="#ecf0f1", fg="#2c3e50", command=lambda cmd=comando: self.procesar_comando_rapido(cmd), cursor="hand2")
             boton.pack(side=tk.LEFT, padx=2, pady=2)
-        
-        # Mensaje de bienvenida
+
+        # Mensaje inicial de bienvenida
         self.mostrar_mensaje("Asistente", "¡Hola! Soy tu asistente virtual. Estoy aquí para ayudarte con tus estudios. Puedes preguntarme sobre matemáticas, ciencias, historia, lengua, o pedirme consejos de estudio. ¡Empecemos!")
-        
-        # Enfocar el campo de entrada
         self.entrada_texto.focus()
-    
+
     def mostrar_mensaje(self, remitente, mensaje):
+        # Habilita el área para insertar texto
         self.area_chat.config(state=tk.NORMAL)
-        
-        # Obtener hora actual
-        hora = datetime.datetime.now().strftime("%H:%M")
-        
-        # Formato del mensaje
+        hora = datetime.datetime.now().strftime("%H:%M")  # Hora actual
         if remitente == "Tú":
             self.area_chat.insert(tk.END, f"[{hora}] {remitente}: {mensaje}\n", "usuario")
         else:
             self.area_chat.insert(tk.END, f"[{hora}] {remitente}: {mensaje}\n\n", "asistente")
-        
         self.area_chat.config(state=tk.DISABLED)
-        self.area_chat.see(tk.END)
-    
+        self.area_chat.see(tk.END)  # Baja el scroll al final
+
     def procesar_comando_rapido(self, comando):
+        # Inserta el comando directamente en el campo de entrada
         self.entrada_texto.delete(0, tk.END)
         self.entrada_texto.insert(0, comando)
         self.enviar_mensaje()
-    
+
     def enviar_mensaje(self, event=None):
         mensaje = self.entrada_texto.get().strip()
         if not mensaje:
             return
-        
-        # Mostrar mensaje del usuario
         self.mostrar_mensaje("Tú", mensaje)
-        
-        # Limpiar campo de entrada
         self.entrada_texto.delete(0, tk.END)
-        
-        # Procesar y responder
         respuesta = self.procesar_mensaje(mensaje)
         self.mostrar_mensaje("Asistente", respuesta)
-    
+
     def procesar_mensaje(self, mensaje):
         mensaje_lower = mensaje.lower()
-        
-        # Buscar palabras clave en el mensaje
+        # Buscar palabra clave
         categoria_encontrada = None
         for palabra_clave, categoria in self.palabras_clave.items():
             if palabra_clave in mensaje_lower:
                 categoria_encontrada = categoria
                 break
-        
-        # Si encontramos una categoría, devolver respuesta aleatoria
         if categoria_encontrada and categoria_encontrada in self.respuestas:
             return random.choice(self.respuestas[categoria_encontrada])
-        
-        # Respuestas específicas para preguntas comunes
+        # Respuestas automáticas
         if "hora" in mensaje_lower:
             return f"Son las {datetime.datetime.now().strftime('%H:%M')} horas."
-        
         if "fecha" in mensaje_lower:
             return f"Hoy es {datetime.datetime.now().strftime('%d de %B de %Y')}."
-        
         if "nombre" in mensaje_lower:
             return "Soy tu asistente virtual para estudiantes. Puedes llamarme como quieras."
-        
         if "ayuda" in mensaje_lower or "help" in mensaje_lower:
             return ("Puedo ayudarte con:\n"
                    "• Matemáticas (álgebra, geometría, aritmética)\n"
@@ -239,7 +191,6 @@ class AsistenteVirtual:
                    "• Consejos de estudio\n"
                    "• Motivación para estudiar\n\n"
                    "Solo escribe tu pregunta o usa los botones de ayuda rápida.")
-        
         # Respuesta por defecto
         respuestas_default = [
             "Interesante pregunta. ¿Podrías ser más específico sobre qué materia necesitas ayuda?",
@@ -247,13 +198,12 @@ class AsistenteVirtual:
             "Hmm, cuéntame más detalles para poder ayudarte mejor.",
             "¿Podrías reformular tu pregunta? Estoy aquí para ayudarte con tus estudios."
         ]
-        
         return random.choice(respuestas_default)
-    
+
     def ejecutar(self):
         self.ventana.mainloop()
 
-# Crear y ejecutar el asistente
+# Ejecutamos la aplicación
 if __name__ == "__main__":
     asistente = AsistenteVirtual()
     asistente.ejecutar()
