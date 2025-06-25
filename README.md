@@ -1,4 +1,4 @@
-# Asistente Virtual Educativo para Estudiantes de Secundaria 🧠🎓
+# Asistente Virtual Educativo - Nivel Secundario 🧠🎓
 
 Este proyecto es un prototipo funcional de un **asistente virtual educativo** desarrollado en Python, diseñado especialmente para estudiantes de nivel secundario. El objetivo es acompañar al estudiante fuera del aula, respondiendo dudas frecuentes sobre materias como Matemáticas, Ciencias, Historia, Lengua y más, a través de una interfaz simple y amigable.
 
@@ -13,12 +13,12 @@ Este proyecto es un prototipo funcional de un **asistente virtual educativo** de
 
 ## ▶️ Cómo ejecutar
 
-1. Asegurate de tener Python instalado.
-2. Ejecutá el script `asistente_virtual_comentado.py` haciendo doble clic o desde consola:
+1. Inicialmente tener Python instalado.
+2. Ejecutar el script `asistente_virtual_comentado.py` haciendo doble clic o desde el simbolo del sistema o consola:
    ```bash
    python asistente_virtual_comentado.py
    ```
-3. Se abrirá una ventana donde podrás interactuar con el asistente.
+3. Se abrirá una ventana donde se podrá interactuar con el asistente.
 
 ## 💬 ¿Qué puede hacer el asistente?
 
