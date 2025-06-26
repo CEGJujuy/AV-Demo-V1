@@ -14,7 +14,7 @@ Este proyecto es un prototipo funcional de un **asistente virtual educativo** de
 ## ▶️ Cómo ejecutar
 
 1. Inicialmente tener Python instalado.
-2. Ejecutar el script `asistente_virtual_comentado.py` haciendo doble clic o desde el simbolo del sistema o consola:
+2. Ejecutar el script `asistente_virtual.py` haciendo doble clic o desde el simbolo del sistema o consola:
    ```bash
    python asistente_virtual_comentado.py
    ```
