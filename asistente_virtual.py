@@ -151,7 +151,7 @@ class AsistenteVirtual:
         self.area_chat.see(tk.END)  # Baja el scroll al final
 
     def procesar_comando_rapido(self, comando):
-        # Inserta el comando directamente en el campo de entrada
+        # Insertamos el comando directamente en el campo de entrada
         self.entrada_texto.delete(0, tk.END)
         self.entrada_texto.insert(0, comando)
         self.enviar_mensaje()
