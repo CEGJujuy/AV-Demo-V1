@@ -1,19 +1,19 @@
-# Importamos las librerías necesarias
-import tkinter as tk  # Librería estándar para crear interfaces gráficas en Python
+# Importamos todas las librerías necesarias
+import tkinter as tk  # Librería estándar de Python para crear interfaces gráficas
 from tkinter import scrolledtext, messagebox  # Widgets adicionales para texto con scroll y mensajes emergentes
-import random  # Para seleccionar respuestas al azar
-import datetime  # Para manejar la hora y fecha actual
+import random  # Nos servirá para seleccionar respuestas al azar
+import datetime  # Permite trabajar la hora y fecha actual
 
-# Definimos la clase del asistente virtual
+# Definimos la clase "Asistente Virtual"
 class AsistenteVirtual:
     def __init__(self):
-        # Crear la ventana principal
+        # Creamos la Pantalla Principal
         self.ventana = tk.Tk()
         self.ventana.title("Asistente Virtual - Estudiantes de Secundaria")
         self.ventana.geometry("600x500")
         self.ventana.configure(bg="#f0f0f0")
 
-        # Diccionario de respuestas organizadas por categorías
+        # Organizamos el Diccionario de respuestas por categorías
         self.respuestas = {
             "saludo": [
                 "¡Hola! Soy tu asistente virtual. ¿En qué puedo ayudarte hoy?",
@@ -59,7 +59,7 @@ class AsistenteVirtual:
             ]
         }
 
-        # Diccionario que relaciona palabras clave con categorías
+        # Establecemos el Diccionario que relaciona palabras clave con categorías
         self.palabras_clave = {
             "hola": "saludo",
             "buenos días": "saludo",
@@ -99,7 +99,7 @@ class AsistenteVirtual:
         self.crear_interfaz()
 
     def crear_interfaz(self):
-        # Agregar título en la ventana
+        # Se Agrega el título en la ventana
         titulo = tk.Label(self.ventana, text="🤖 Asistente Virtual para Estudiantes", font=("Arial", 16, "bold"), bg="#f0f0f0", fg="#2c3e50")
         titulo.pack(pady=10)
 
