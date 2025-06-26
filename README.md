@@ -16,7 +16,7 @@ Este proyecto es un prototipo funcional de un **asistente virtual educativo** de
 1. Inicialmente tener Python instalado.
 2. Ejecutar el script `asistente_virtual.py` haciendo doble clic o desde el simbolo del sistema o consola:
    ```bash
-   python asistente_virtual_comentado.py
+   python asistente_virtual.py
    ```
 3. Se abrirá una ventana donde se podrá interactuar con el asistente.
 
@@ -36,7 +36,7 @@ Este proyecto es un prototipo funcional de un **asistente virtual educativo** de
 
 ## 📁 Archivos incluidos
 
-- `asistente_virtual_comentado.py`: código fuente comentado.
+- `asistente_virtual.py`: código fuente comentado.
 - `ManualdeUsuario.pdf`: guía rápida de uso.
 - `README.md`: este archivo, con toda la información básica del proyecto.
 
