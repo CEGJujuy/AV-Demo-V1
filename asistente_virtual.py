@@ -59,7 +59,7 @@ class AsistenteVirtual:
             ]
         }
 
-        # Establecemos el Diccionario que relaciona palabras clave con categorías
+        # Establecemos el Diccionario que relaciona palabras clave y categorías
         self.palabras_clave = {
             "hola": "saludo",
             "buenos días": "saludo",
@@ -95,7 +95,7 @@ class AsistenteVirtual:
             "bye": "despedida"
         }
 
-        # Crear la interfaz gráfica
+        # Se crea la interfaz gráfica
         self.crear_interfaz()
 
     def crear_interfaz(self):
@@ -103,28 +103,28 @@ class AsistenteVirtual:
         titulo = tk.Label(self.ventana, text="🤖 Asistente Virtual para Estudiantes", font=("Arial", 16, "bold"), bg="#f0f0f0", fg="#2c3e50")
         titulo.pack(pady=10)
 
-        # Área donde se mostrará la conversación
+        # Definimos el Área donde se mostrará la conversación
         self.area_chat = scrolledtext.ScrolledText(self.ventana, width=70, height=20, font=("Arial", 10), bg="white", fg="black", state=tk.DISABLED)
         self.area_chat.pack(padx=10, pady=5, fill=tk.BOTH, expand=True)
 
-        # Frame para entrada de texto y botón
+        # Definimos el Marco para la entrada de texto y botón
         frame_entrada = tk.Frame(self.ventana, bg="#f0f0f0")
         frame_entrada.pack(fill=tk.X, padx=10, pady=5)
 
-        # Entrada para que el usuario escriba
+        # Definimos la Entrada para que el usuario ingrese las consultas
         self.entrada_texto = tk.Entry(frame_entrada, font=("Arial", 12), width=50)
         self.entrada_texto.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=(0, 5))
         self.entrada_texto.bind("<Return>", self.enviar_mensaje)
 
-        # Botón para enviar el mensaje
+        # Definimos el Botón para enviar el mensaje
         boton_enviar = tk.Button(frame_entrada, text="Enviar", font=("Arial", 10, "bold"), bg="#3498db", fg="white", command=self.enviar_mensaje, cursor="hand2")
         boton_enviar.pack(side=tk.RIGHT)
 
-        # Frame para botones rápidos
+        # Se establece el Marco para botones rápidos
         frame_botones = tk.Frame(self.ventana, bg="#f0f0f0")
         frame_botones.pack(fill=tk.X, padx=10, pady=5)
 
-        # Botones de ayuda rápida
+        # Definimos los Botones de ayuda rápida
         botones_ayuda = [
             ("📚 Consejos de Estudio", "consejos de estudio"),
             ("💪 Motivación", "necesito motivación"),
@@ -135,7 +135,7 @@ class AsistenteVirtual:
             boton = tk.Button(frame_botones, text=texto, font=("Arial", 8), bg="#ecf0f1", fg="#2c3e50", command=lambda cmd=comando: self.procesar_comando_rapido(cmd), cursor="hand2")
             boton.pack(side=tk.LEFT, padx=2, pady=2)
 
-        # Mensaje inicial de bienvenida
+        # Muestra del Mensaje inicial de bienvenida
         self.mostrar_mensaje("Asistente", "¡Hola! Soy tu asistente virtual. Estoy aquí para ayudarte con tus estudios. Puedes preguntarme sobre matemáticas, ciencias, historia, lengua, o pedirme consejos de estudio. ¡Empecemos!")
         self.entrada_texto.focus()
 
