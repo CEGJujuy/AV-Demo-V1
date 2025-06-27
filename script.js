@@ -2,9 +2,9 @@ class AsistenteVirtual {
     constructor() {
         this.respuestas = {
             "saludo": [
-                "¡Hola! Soy tu asistente virtual. ¿En qué materia puedo ayudarte hoy?",
-                "¡Hola! ¿Cómo estás? ¿Necesitas ayuda con alguna materia específica?",
-                "¡Saludos! Estoy aquí para ayudarte con todas tus materias de secundaria."
+                "¡Hola! Soy Eduki, tu asistente virtual. ¿En qué materia puedo ayudarte hoy?",
+                "¡Hola! ¿Cómo estás? Soy Eduki y estoy aquí para ayudarte con cualquier materia específica.",
+                "¡Saludos! Soy Eduki, tu compañero de estudios. Estoy aquí para ayudarte con todas tus materias de secundaria."
             ],
             "matematicas": [
                 "Las matemáticas son la base de muchas ciencias. ¿Necesitas ayuda con álgebra, geometría, trigonometría o cálculo?",
@@ -354,7 +354,9 @@ class AsistenteVirtual {
         const typingDiv = document.createElement('div');
         typingDiv.className = 'message assistant-message typing-message';
         typingDiv.innerHTML = `
-            <div class="message-avatar">🤖</div>
+            <div class="message-avatar">
+                <img src="public/Eduki.jpeg" alt="Eduki" class="avatar-mascot">
+            </div>
             <div class="message-content">
                 <div class="message-text">
                     <div class="typing-indicator">
@@ -381,7 +383,7 @@ class AsistenteVirtual {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${tipo}-message`;
 
-        const avatar = tipo === 'user' ? '👤' : '🤖';
+        const avatar = tipo === 'user' ? '👤' : '<img src="public/Eduki.jpeg" alt="Eduki" class="avatar-mascot">';
         const hora = this.obtenerHora();
 
         messageDiv.innerHTML = `
@@ -434,7 +436,7 @@ class AsistenteVirtual {
         }
 
         if (mensajeLower.includes('nombre')) {
-            return "Soy tu asistente virtual especializado en educación secundaria. Puedes llamarme como quieras. ¡Estoy aquí para ayudarte con todas tus materias!";
+            return "Soy Eduki, tu asistente virtual especializado en educación secundaria. ¡Estoy aquí para ayudarte con todas tus materias!";
         }
 
         if (mensajeLower.includes('materias') || mensajeLower.includes('asignaturas')) {
@@ -456,7 +458,7 @@ class AsistenteVirtual {
         }
 
         if (mensajeLower.includes('ayuda') || mensajeLower.includes('help')) {
-            return `¡Estoy aquí para ayudarte! Puedo asistirte con:
+            return `¡Hola! Soy **Eduki** y estoy aquí para ayudarte! Puedo asistirte con:
 
 📚 **Todas las materias de secundaria:**
 Matemáticas, Ciencias, Historia, Lengua, Inglés, Geografía, Arte, Música, Educación Física, Filosofía
