@@ -40,8 +40,8 @@ Este módulo complementa el asistente virtual educativo detectando automáticame
 📩 Se notifica al estudiante que su consulta será evaluada por un docente.
 🧑‍🏫 Se genera una alerta visual para el docente con la consulta, fecha y hora.
 📋 La consulta se registra en consultas_pendientes.json con timestamp ISO.
-🛠️ El docente accede a un panel de gestión con herramientas para:
 
+🛠️ El docente accede a un panel de gestión con herramientas para:
 - Actualizar consultas.
 - Marcar como resueltas.
 - Exportar en archivo de texto.
