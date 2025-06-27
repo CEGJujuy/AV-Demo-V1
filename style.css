@@ -33,6 +33,7 @@ body {
     padding: 25px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
 }
 
 .mascot-container {
@@ -95,6 +96,154 @@ body {
 .header p strong {
     color: #1e3c72;
     font-weight: 600;
+}
+
+/* Estilos del Panel Docente */
+.teacher-panel {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 1000;
+}
+
+.teacher-btn {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(231, 76, 60, 0.3);
+}
+
+.teacher-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+}
+
+.teacher-content {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    min-width: 350px;
+    max-width: 400px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    border: 1px solid #e9ecef;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.teacher-content h3 {
+    color: #2c3e50;
+    margin-bottom: 15px;
+    font-size: 1.1rem;
+    border-bottom: 2px solid #e9ecef;
+    padding-bottom: 8px;
+}
+
+.pending-queries {
+    margin-bottom: 15px;
+}
+
+.no-queries {
+    color: #27ae60;
+    font-style: italic;
+    text-align: center;
+    padding: 20px;
+}
+
+.query-item {
+    background: #f8f9fa;
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 12px;
+    border-left: 4px solid #e74c3c;
+}
+
+.query-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.query-number {
+    background: #e74c3c;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.query-time {
+    font-size: 0.7rem;
+    color: #6c757d;
+}
+
+.query-message {
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    font-style: italic;
+    border: 1px solid #e9ecef;
+}
+
+.query-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.respond-btn, .mark-resolved-btn {
+    flex: 1;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.respond-btn {
+    background: #3498db;
+    color: white;
+}
+
+.respond-btn:hover {
+    background: #2980b9;
+}
+
+.mark-resolved-btn {
+    background: #27ae60;
+    color: white;
+}
+
+.mark-resolved-btn:hover {
+    background: #229954;
+}
+
+.refresh-btn {
+    width: 100%;
+    background: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.refresh-btn:hover {
+    background: #e67e22;
 }
 
 .main {
@@ -465,6 +614,23 @@ body {
     .mascot-image {
         width: 70px;
         height: 70px;
+    }
+    
+    .teacher-panel {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-top: 15px;
+        text-align: center;
+    }
+    
+    .teacher-content {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin-top: 10px;
+        min-width: auto;
+        max-width: none;
     }
     
     .chat-container {

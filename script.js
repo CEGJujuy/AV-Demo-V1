@@ -254,6 +254,9 @@ class AsistenteVirtual {
             "nos vemos": "despedida"
         };
 
+        // Array para almacenar consultas no reconocidas
+        this.consultasNoReconocidas = [];
+        
         this.initializeElements();
         this.setupEventListeners();
         this.setWelcomeTime();
@@ -402,6 +405,41 @@ class AsistenteVirtual {
         this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
     }
 
+    // Función para enviar alerta al docente
+    enviarAlertaDocente(consulta) {
+        // Guardar la consulta no reconocida
+        const consultaInfo = {
+            mensaje: consulta,
+            fecha: new Date().toLocaleString('es-ES'),
+            hora: this.obtenerHora()
+        };
+        
+        this.consultasNoReconocidas.push(consultaInfo);
+        
+        // En un entorno real, aquí se enviaría la alerta al docente
+        // Por ejemplo, mediante una API, email, o sistema de notificaciones
+        console.log('🚨 ALERTA DOCENTE - Nueva consulta no reconocida:', consultaInfo);
+        
+        // Simular notificación al docente (en un entorno real sería una llamada a API)
+        this.simularNotificacionDocente(consultaInfo);
+    }
+
+    // Simular notificación al docente
+    simularNotificacionDocente(consultaInfo) {
+        // En un entorno real, esto sería una llamada a una API o servicio de notificaciones
+        setTimeout(() => {
+            console.log(`📧 Notificación enviada al docente:
+            Estudiante realizó consulta: "${consultaInfo.mensaje}"
+            Fecha y hora: ${consultaInfo.fecha}
+            Estado: Pendiente de respuesta`);
+        }, 500);
+    }
+
+    // Función para mostrar consultas pendientes (para uso del docente)
+    obtenerConsultasPendientes() {
+        return this.consultasNoReconocidas;
+    }
+
     procesarMensaje(mensaje) {
         const mensajeLower = mensaje.toLowerCase();
 
@@ -477,23 +515,30 @@ Matemáticas, Ciencias, Historia, Lengua, Inglés, Geografía, Arte, Música, Ed
 ¡Estoy aquí para ayudarte a tener éxito en tus estudios!`;
         }
 
-        // Respuestas por defecto más variadas
-        const respuestasDefault = [
-            "Interesante pregunta. ¿Podrías ser más específico sobre qué materia necesitas ayuda? Puedes usar los botones de materias arriba.",
-            "No estoy seguro de entender completamente. ¿Te refieres a alguna materia específica como matemáticas, ciencias, historia o lengua?",
-            "Hmm, cuéntame más detalles para poder ayudarte mejor. ¿Es sobre alguna materia en particular?",
-            "¿Podrías reformular tu pregunta? Estoy especializado en materias de secundaria y técnicas de estudio.",
-            "Me gustaría ayudarte mejor. ¿Puedes darme más contexto sobre lo que necesitas? Usa los botones de materias si te ayuda.",
-            "¡Excelente que quieras aprender! ¿En qué materia específica necesitas ayuda? Tengo conocimientos en todas las materias de secundaria."
-        ];
+        // Si llegamos aquí, la consulta no fue reconocida
+        // Enviar alerta al docente
+        this.enviarAlertaDocente(mensaje);
 
-        return respuestasDefault[Math.floor(Math.random() * respuestasDefault.length)];
+        // Devolver mensaje de alerta al estudiante
+        return `🔔 **Tu consulta será evaluada por un Docente**
+
+Gracias por tu pregunta. He registrado tu consulta y **en breve un docente se comunicará contigo** para brindarte la ayuda específica que necesitas.
+
+📝 **Tu consulta:** "${mensaje}"
+⏰ **Registrada a las:** ${this.obtenerHora()}
+
+Mientras tanto, puedes:
+• Explorar las materias disponibles usando los botones
+• Hacer preguntas sobre temas que sí puedo ayudarte
+• Revisar los consejos de estudio
+
+¡Gracias por tu paciencia!`;
     }
 }
 
 // Inicializar el asistente cuando se carga la página
 document.addEventListener('DOMContentLoaded', () => {
-    new AsistenteVirtual();
+    window.asistenteVirtual = new AsistenteVirtual();
     
     // Agregar estilos para el indicador de typing
     if (!document.getElementById('typing-styles')) {
@@ -522,3 +567,13 @@ document.addEventListener('DOMContentLoaded', () => {
         document.head.appendChild(style);
     }
 });
+
+// Función global para que el docente pueda acceder a las consultas pendientes
+function obtenerConsultasPendientesDocente() {
+    if (window.asistenteVirtual) {
+        const consultas = window.asistenteVirtual.obtenerConsultasPendientes();
+        console.log('📋 Consultas pendientes para el docente:', consultas);
+        return consultas;
+    }
+    return [];
+}
