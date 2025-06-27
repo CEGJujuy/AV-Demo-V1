@@ -36,8 +36,8 @@ Esta tesis está diseñada especialmente para estudiantes de nivel secundario. E
 
 ## 🔔 Sistema de Alerta al Docente
 Cuando se detectan consultas que no pueden ser respondidas:
-📩 Se notifica al estudiante que su consulta será evaluada por un docente.
-🧑‍🏫 Se genera una alerta visual para el docente con la consulta, fecha y hora.
+- Se notifica al estudiante que su consulta será evaluada por un docente.
+- Se genera una alerta visual para el docente con la consulta, fecha y hora.
 
 🛠️ El docente accede a un panel de gestión con herramientas para:
 - Actualizar consultas.
