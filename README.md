@@ -1,6 +1,6 @@
 # Asistente Virtual Educativo - Nivel Secundario 🧠🎓
 
-Este proyecto es un prototipo funcional de un **asistente virtual educativo** desarrollado en Python, diseñado especialmente para estudiantes de nivel secundario. El objetivo es acompañar al estudiante fuera del aula, respondiendo dudas frecuentes sobre materias como Matemáticas, Ciencias, Historia, Lengua y más, a través de una interfaz simple y amigable.
+Esta tesis está diseñada especialmente para estudiantes de nivel secundario. El objetivo es acompañar al estudiante fuera del aula, respondiendo dudas frecuentes sobre materias curriculares, a través de una interfaz simple y amigable.
 
 ## 📦 Requisitos del sistema
 
