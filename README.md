@@ -34,6 +34,19 @@ Este proyecto es un prototipo funcional de un **asistente virtual educativo** de
 - Botones de acceso rápido a temas frecuentes
 - Diseño de fácil integración con IA más avanzada
 
+## 🔔 Sistema de Alerta al Docente
+Este módulo complementa el asistente virtual educativo detectando automáticamente consultas que no pueden ser respondidas. Al ocurrir:
+
+📩 Se notifica al estudiante que su consulta será evaluada por un docente.
+🧑‍🏫 Se genera una alerta visual para el docente con la consulta, fecha y hora.
+📋 La consulta se registra en consultas_pendientes.json con timestamp ISO.
+🛠️ El docente accede a un panel de gestión con herramientas para:
+
+- Actualizar consultas.
+- Marcar como resueltas.
+- Exportar en archivo de texto.
+- Incluye interfaz ampliada, categorización por materias y asegura que ninguna consulta quede sin seguimiento, fortaleciendo el acompañamiento docente con IA educativa.
+
 ## 📁 Archivos incluidos
 
 - `asistente_virtual.py`: código fuente comentado.
@@ -42,7 +55,7 @@ Este proyecto es un prototipo funcional de un **asistente virtual educativo** de
 
 ## 🧪 Versión actual
 
-Versión 1.0 - Junio 2025  
+Versión Alpha 1.5 - Junio 2025  
 Seminario Final de Informática
 
 ## 👤 Autor
