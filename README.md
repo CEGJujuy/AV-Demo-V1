@@ -1,4 +1,4 @@
-# Asistente Virtual Educativo - Nivel Secundario 🧠🎓
+# Asistente Virtual Educativo🎓
 
 Esta tesis está diseñada especialmente para estudiantes de nivel secundario. El objetivo es acompañar al estudiante fuera del aula, respondiendo dudas frecuentes sobre materias curriculares, a través de una interfaz simple y amigable.
 
