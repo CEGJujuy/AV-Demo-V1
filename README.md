@@ -1,6 +1,6 @@
-# Asistente Virtual Educativo🎓
+# Asistente Virtual Educativo - Eduki🎓🤖
 
-Esta tesis está diseñada especialmente para estudiantes de nivel secundario. El objetivo es acompañar al estudiante fuera del aula, respondiendo dudas frecuentes sobre materias curriculares, a través de una interfaz simple y amigable.
+Esta tesis está dirigida especialmente a estudiantes del nivel secundario. El objetivo, es acompañarlos fuera del aula, respondiendo dudas frecuentes sobre materias curriculares, a través de una interfaz simple y amigable.
 
 ## 📦 Requisitos del sistema
 
@@ -14,7 +14,7 @@ Esta tesis está diseñada especialmente para estudiantes de nivel secundario. E
 ## ▶️ Cómo ejecutar
 
 1. Inicialmente tener Python instalado.
-2. Ejecutar el script `asistente_virtual.py` haciendo doble clic o desde el simbolo del sistema o consola:
+2. Ejecutar el script `asistente_virtual.py` haciendo doble clic o desde el símbolo del sistema o consola:
    ```bash
    python asistente_virtual.py
    ```
@@ -49,7 +49,7 @@ Cuando se detectan consultas que no pueden ser respondidas:
 
 - `asistente_virtual.py`: código fuente comentado.
 - `ManualdeUsuario.pdf`: guía rápida de uso.
-- `README.md`: este archivo, con toda la información básica del proyecto.
+- `README.md`: contiene la síntesis de toda la información básica del prototipo.
 
 ## 🧪 Versión actual
 
