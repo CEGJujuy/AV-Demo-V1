@@ -50,16 +50,6 @@ body {
     object-fit: cover;
     border: 3px solid #1e3c72;
     box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-8px);
-    }
 }
 
 .robot-icon {
