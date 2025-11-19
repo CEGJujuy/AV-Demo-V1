@@ -93,7 +93,7 @@ body {
     position: fixed;
     top: 20px;
     right: 20px;
-    z-index: 9999;
+    z-index: 99999;
 }
 
 .teacher-btn {
@@ -123,18 +123,18 @@ body {
     padding: 20px;
     min-width: 500px;
     max-width: 600px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    border: 2px solid #e74c3c;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    border: 1px solid #e9ecef;
     max-height: calc(100vh - 100px);
     overflow-y: auto;
-    z-index: 9998;
+    z-index: 99998;
 }
 
 .teacher-content h3 {
     color: #2c3e50;
     margin-bottom: 15px;
     font-size: 1.1rem;
-    border-bottom: 2px solid #e74c3c;
+    border-bottom: 2px solid #e9ecef;
     padding-bottom: 8px;
     display: flex;
     align-items: center;
