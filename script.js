@@ -496,15 +496,20 @@ class AsistenteVirtual {
 
         this.consultasNoReconocidas.push(consultaInfo);
 
-        const resultado = await guardarConsultaPendiente(consulta, fecha, hora, categoriaDetectada || 'general');
-
-        if (resultado.success) {
-            console.log('✅ Consulta guardada en Supabase:', resultado.data);
-        } else {
-            console.error('❌ Error al guardar consulta en Supabase:', resultado.error);
+        try {
+            const resultado = await guardarConsultaPendiente(consulta, fecha, hora, categoriaDetectada || 'general');
+            if (resultado.success) {
+                console.log('✅ Consulta guardada:', resultado.data);
+            }
+        } catch (err) {
+            console.warn('⚠️ Error al guardar consulta, pero continuando:', err);
         }
 
-        await guardarMensajeHistorial(consulta, 'usuario', categoriaDetectada, false);
+        try {
+            await guardarMensajeHistorial(consulta, 'usuario', categoriaDetectada, false);
+        } catch (err) {
+            console.warn('⚠️ Error al guardar historial, pero continuando:', err);
+        }
 
         console.log('🚨 ALERTA DOCENTE - Nueva consulta no reconocida:', consultaInfo);
     }
@@ -546,8 +551,12 @@ class AsistenteVirtual {
         if (categoriaEncontrada && this.respuestas[categoriaEncontrada]) {
             const respuestas = this.respuestas[categoriaEncontrada];
             const respuesta = respuestas[Math.floor(Math.random() * respuestas.length)];
-            await guardarMensajeHistorial(mensaje, 'usuario', categoriaEncontrada, true);
-            await guardarMensajeHistorial(respuesta, 'asistente', categoriaEncontrada, true);
+            try {
+                await guardarMensajeHistorial(mensaje, 'usuario', categoriaEncontrada, true);
+                await guardarMensajeHistorial(respuesta, 'asistente', categoriaEncontrada, true);
+            } catch (err) {
+                console.warn('⚠️ Error al guardar historial:', err);
+            }
             return respuesta;
         }
 
