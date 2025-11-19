@@ -18,26 +18,26 @@
                 </div>
                 <h1>Asistente Virtual Educativo</h1>
                 <p>Compañero y Guía de Estudio</p>
-                
-                <!-- Panel de administración para docentes (oculto por defecto) -->
-                <div id="teacherPanel" class="teacher-panel" style="display: none;">
-                    <button id="toggleTeacherPanel" class="teacher-btn">
-                        👨‍🏫 Panel Docente
-                    </button>
-                    <div id="teacherContent" class="teacher-content" style="display: none;">
-                        <h3>📋 Consultas Pendientes</h3>
-                        <div id="pendingQueries" class="pending-queries">
-                            <p>No hay consultas pendientes</p>
-                        </div>
-                        <div class="teacher-actions">
-                            <button id="refreshQueries" class="refresh-btn">🔄 Actualizar</button>
-                            <button id="markAllResolved" class="mark-all-btn">✅ Marcar Todas</button>
-                            <button id="exportQueries" class="export-btn">📄 Exportar</button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </header>
+
+        <!-- Panel de administración para docentes (oculto por defecto) -->
+        <div id="teacherPanel" class="teacher-panel" style="display: none;">
+            <button id="toggleTeacherPanel" class="teacher-btn">
+                👨‍🏫 Panel Docente
+            </button>
+            <div id="teacherContent" class="teacher-content" style="display: none;">
+                <h3>📋 Consultas Pendientes</h3>
+                <div id="pendingQueries" class="pending-queries">
+                    <p>No hay consultas pendientes</p>
+                </div>
+                <div class="teacher-actions">
+                    <button id="refreshQueries" class="refresh-btn">🔄 Actualizar</button>
+                    <button id="markAllResolved" class="mark-all-btn">✅ Marcar Todas</button>
+                    <button id="exportQueries" class="export-btn">📄 Exportar</button>
+                </div>
+            </div>
+        </div>
 
         <main class="main">
             <div class="chat-container">

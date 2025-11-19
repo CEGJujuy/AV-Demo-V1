@@ -19,6 +19,8 @@ body {
     display: flex;
     flex-direction: column;
     padding: 20px;
+    position: relative;
+    z-index: 1;
 }
 
 .header {
@@ -90,10 +92,11 @@ body {
 
 /* Estilos del Panel Docente */
 .teacher-panel {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    z-index: 99999;
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 9999999 !important;
+    pointer-events: auto;
 }
 
 .teacher-btn {
@@ -115,19 +118,20 @@ body {
 }
 
 .teacher-content {
-    position: fixed;
-    top: 70px;
-    right: 20px;
+    position: fixed !important;
+    top: 70px !important;
+    right: 20px !important;
     background: white;
     border-radius: 15px;
     padding: 20px;
     min-width: 500px;
     max-width: 600px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
     border: 1px solid #e9ecef;
-    max-height: calc(100vh - 100px);
+    max-height: calc(100vh - 100px) !important;
     overflow-y: auto;
-    z-index: 99998;
+    z-index: 999999 !important;
+    pointer-events: auto;
 }
 
 .teacher-content h3 {
