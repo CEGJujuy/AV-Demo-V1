@@ -56,6 +56,46 @@ Esta tesis está dirigida especialmente a estudiantes del nivel secundario. El o
 - Mostrar fecha y hora actual.
 - Ofrecer respuestas automáticas ante palabras clave.
 
+## 🎯 Guía de botones de la interfaz
+
+### Para estudiantes:
+
+**Botones de Materias** 🔢🧪🏛️📖
+- Permiten acceso rápido a contenido de cada asignatura (Matemáticas, Ciencias, Historia, Lengua, Inglés, Geografía, Ed. Física, Arte, Música, Filosofía)
+- Al presionarlos, el asistente se enfoca en la materia seleccionada
+
+**Botones de Ayuda Rápida** ⚡
+- **Consejos de Estudio**: Técnicas y metodologías para mejorar el aprendizaje
+- **Motivación**: Mensajes de apoyo y estrategias para mantener el ánimo
+- **Preparar Exámenes**: Guías para organizar el estudio antes de evaluaciones
+- **Organizar Tiempo**: Herramientas para administrar horarios de estudio
+
+**Botón Enviar** ✉️
+- Envía la pregunta escrita al asistente virtual
+
+### Para docentes (Panel Docente 👨‍🏫):
+
+**🔄 Actualizar**
+- Refresca la lista de consultas pendientes manualmente
+
+**✅ Marcar Todas**
+- Marca todas las consultas pendientes como resueltas simultáneamente
+
+**📊 Consultas Previas**
+- Muestra todas las consultas (pendientes y resueltas) organizadas por materia
+- Incluye estadísticas: total de consultas, resueltas y pendientes por asignatura
+- Permite revisar el historial completo con respuestas del docente
+
+**📄 Exportar**
+- Descarga un archivo de texto (.txt) con todas las consultas registradas
+- Incluye fecha, categoría, estado y respuestas del docente
+
+**📝 Responder** (en cada consulta)
+- Abre un formulario para que el docente escriba una respuesta personalizada al estudiante
+
+**✅ Marcar como resuelto** (en cada consulta)
+- Marca una consulta individual como resuelta sin añadir respuesta
+
 ## 📌 Funcionalidades destacadas
 
 - Interfaz gráfica intuitiva web y local (Tkinter)
