@@ -1,7 +1,27 @@
+/**
+ * ========================================
+ * ASISTENTE VIRTUAL - LÓGICA PRINCIPAL
+ * ========================================
+ *
+ * Este módulo implementa la lógica del asistente virtual educativo:
+ * - Sistema de reconocimiento de consultas por palabras clave
+ * - Base de conocimiento con respuestas predefinidas por materia
+ * - Gestión de la interfaz de chat (mensajes, botones, eventos)
+ * - Integración con base de datos para almacenar consultas
+ * - Sistema de derivación de consultas no reconocidas a docentes
+ */
+
+// Importar funciones de gestión de base de datos
 import { guardarConsultaPendiente, obtenerConsultasPendientes, marcarConsultaResuelta, marcarTodasResueltas, exportarConsultas, guardarMensajeHistorial } from './database.js';
 
+/**
+ * Clase principal del Asistente Virtual
+ * Gestiona toda la lógica de interacción con el estudiante
+ */
 class AsistenteVirtual {
     constructor() {
+        // Base de conocimiento: respuestas predefinidas organizadas por categorías
+        // Cada categoría tiene múltiples respuestas para variar las interacciones
         this.respuestas = {
             "saludo": [
                 "¡Hola! Soy Eduki, tu asistente virtual. ¿En qué materia puedo ayudarte hoy?",
@@ -134,6 +154,8 @@ class AsistenteVirtual {
             ]
         };
 
+        // Diccionario de palabras clave: mapea términos a categorías de respuestas
+        // Usado para detectar la intención del estudiante y responder apropiadamente
         this.palabrasClave = {
             // Saludos
             "hola": "saludo",
@@ -256,14 +278,19 @@ class AsistenteVirtual {
             "nos vemos": "despedida"
         };
 
-        // Array para almacenar consultas no reconocidas
+        // Array para almacenar consultas no reconocidas (para debugging y estadísticas)
         this.consultasNoReconocidas = [];
-        
+
+        // Inicializar elementos del DOM y configurar eventos
         this.initializeElements();
         this.setupEventListeners();
         this.setWelcomeTime();
     }
 
+    /**
+     * Método para obtener referencias a elementos del DOM
+     * Almacena referencias para uso posterior en la clase
+     */
     initializeElements() {
         this.chatMessages = document.getElementById('chatMessages');
         this.messageInput = document.getElementById('messageInput');
@@ -272,8 +299,14 @@ class AsistenteVirtual {
         this.subjectButtons = document.querySelectorAll('.subject-btn');
     }
 
+    /**
+     * Método para configurar todos los event listeners
+     * - Envío de mensajes (Enter y botón)
+     * - Botones de ayuda rápida
+     * - Botones de materias
+     */
     setupEventListeners() {
-        // Enviar mensaje con Enter
+        // Event listener: Enviar mensaje con tecla Enter
         this.messageInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -281,12 +314,12 @@ class AsistenteVirtual {
             }
         });
 
-        // Enviar mensaje con botón
+        // Event listener: Enviar mensaje con clic en botón
         this.sendButton.addEventListener('click', () => {
             this.enviarMensaje();
         });
 
-        // Botones de ayuda rápida
+        // Event listeners: Botones de ayuda rápida (consejos, motivación, etc.)
         this.quickButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const command = button.getAttribute('data-command');
@@ -294,7 +327,7 @@ class AsistenteVirtual {
             });
         });
 
-        // Botones de materias
+        // Event listeners: Botones de materias (matemáticas, ciencias, etc.)
         this.subjectButtons.forEach(button => {
             button.addEventListener('click', () => {
                 const command = button.getAttribute('data-command');
@@ -302,12 +335,15 @@ class AsistenteVirtual {
             });
         });
 
-        // Auto-resize del input
+        // Event listener: Activar/desactivar botón de envío según haya texto
         this.messageInput.addEventListener('input', () => {
             this.toggleSendButton();
         });
     }
 
+    /**
+     * Método para establecer la hora en el mensaje de bienvenida
+     */
     setWelcomeTime() {
         const welcomeTimeElement = document.getElementById('welcomeTime');
         if (welcomeTimeElement) {
@@ -315,11 +351,19 @@ class AsistenteVirtual {
         }
     }
 
+    /**
+     * Método para habilitar/deshabilitar el botón de envío
+     * Solo está activo cuando hay texto en el input
+     */
     toggleSendButton() {
         const hasText = this.messageInput.value.trim().length > 0;
         this.sendButton.disabled = !hasText;
     }
 
+    /**
+     * Método auxiliar para obtener la hora actual formateada
+     * Retorna hora en formato HH:MM
+     */
     obtenerHora() {
         const now = new Date();
         return now.toLocaleTimeString('es-ES', { 
@@ -328,24 +372,35 @@ class AsistenteVirtual {
         });
     }
 
+    /**
+     * Método para procesar comandos de botones rápidos
+     * Coloca el texto del botón en el input y lo envía
+     */
     procesarComandoRapido(comando) {
         this.messageInput.value = comando;
         this.messageInput.focus();
         this.enviarMensaje();
     }
 
+    /**
+     * Método principal para enviar mensajes del usuario
+     * - Valida que haya contenido
+     * - Muestra el mensaje en el chat
+     * - Procesa y genera respuesta
+     * - Muestra indicador de "escribiendo"
+     */
     async enviarMensaje() {
         const mensaje = this.messageInput.value.trim();
         if (!mensaje) return;
 
-        // Mostrar mensaje del usuario
+        // Mostrar mensaje del usuario en el chat
         this.mostrarMensaje(mensaje, 'user');
 
-        // Limpiar input
+        // Limpiar el campo de entrada
         this.messageInput.value = '';
         this.toggleSendButton();
 
-        // Simular typing delay
+        // Mostrar indicador de "escribiendo" para simular respuesta humana
         this.mostrarTyping();
 
         setTimeout(async () => {
@@ -355,6 +410,10 @@ class AsistenteVirtual {
         }, 1000 + Math.random() * 1000);
     }
 
+    /**
+     * Método para mostrar indicador visual de "escribiendo"
+     * Crea animación de tres puntos que se mueven
+     */
     mostrarTyping() {
         const typingDiv = document.createElement('div');
         typingDiv.className = 'message assistant-message typing-message';
@@ -377,6 +436,9 @@ class AsistenteVirtual {
         this.scrollToBottom();
     }
 
+    /**
+     * Método para ocultar el indicador de "escribiendo"
+     */
     ocultarTyping() {
         const typingMessage = this.chatMessages.querySelector('.typing-message');
         if (typingMessage) {
@@ -384,6 +446,11 @@ class AsistenteVirtual {
         }
     }
 
+    /**
+     * Método para mostrar un mensaje en el chat
+     * @param {string} mensaje - Contenido del mensaje
+     * @param {string} tipo - 'user' o 'assistant'
+     */
     mostrarMensaje(mensaje, tipo) {
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${tipo}-message`;
@@ -403,11 +470,19 @@ class AsistenteVirtual {
         this.scrollToBottom();
     }
 
+    /**
+     * Método para hacer scroll automático al último mensaje
+     */
     scrollToBottom() {
         this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
     }
 
-    // Función para enviar alerta al docente
+    /**
+     * Método para enviar una consulta no reconocida al panel docente
+     * - Guarda la consulta en la base de datos como "pendiente"
+     * - Guarda en historial para análisis
+     * - Almacena localmente para debugging
+     */
     async enviarAlertaDocente(consulta, categoriaDetectada = null) {
         const fecha = new Date().toLocaleDateString('es-ES');
         const hora = this.obtenerHora();
@@ -435,7 +510,10 @@ class AsistenteVirtual {
     }
 
 
-    // Función para mostrar consultas pendientes (para uso del docente)
+    /**
+     * Método para obtener consultas pendientes
+     * Retorna consultas de la BD o del array local como fallback
+     */
     async obtenerConsultasPendientes() {
         const resultado = await obtenerConsultasPendientes();
         if (resultado.success) {
@@ -444,10 +522,18 @@ class AsistenteVirtual {
         return this.consultasNoReconocidas;
     }
 
+    /**
+     * Método principal de procesamiento de mensajes
+     * - Analiza el mensaje buscando palabras clave
+     * - Identifica la categoría de la consulta
+     * - Genera respuesta apropiada o deriva a docente
+     * - Guarda interacción en historial
+     */
     async procesarMensaje(mensaje) {
+        // Convertir mensaje a minúsculas para búsqueda case-insensitive
         const mensajeLower = mensaje.toLowerCase();
 
-        // Buscar palabras clave en el mensaje
+        // Buscar palabras clave en el mensaje para identificar categoría
         let categoriaEncontrada = null;
         for (const [palabraClave, categoria] of Object.entries(this.palabrasClave)) {
             if (mensajeLower.includes(palabraClave)) {
@@ -456,7 +542,7 @@ class AsistenteVirtual {
             }
         }
 
-        // Si encontramos una categoría, devolver respuesta aleatoria
+        // Si encontramos una categoría conocida, devolver respuesta aleatoria de esa categoría
         if (categoriaEncontrada && this.respuestas[categoriaEncontrada]) {
             const respuestas = this.respuestas[categoriaEncontrada];
             const respuesta = respuestas[Math.floor(Math.random() * respuestas.length)];
@@ -465,7 +551,7 @@ class AsistenteVirtual {
             return respuesta;
         }
 
-        // Respuestas específicas para preguntas comunes
+        // Manejo especial para preguntas comunes que no están en el diccionario
         if (mensajeLower.includes('hora')) {
             return `Son las ${this.obtenerHora()} horas.`;
         }
@@ -522,8 +608,8 @@ Matemáticas, Ciencias, Historia, Lengua, Inglés, Geografía, Arte, Música, Ed
 ¡Estoy aquí para ayudarte a tener éxito en tus estudios!`;
         }
 
-        // Si llegamos aquí, la consulta no fue reconocida
-        // Intentar detectar categoría aunque no tengamos respuesta exacta
+        // Si llegamos aquí, la consulta no fue reconocida por el sistema
+        // Intentar detectar categoría de todas formas para clasificarla al derivarla
         let categoriaDetectada = null;
         for (const [palabraClave, categoria] of Object.entries(this.palabrasClave)) {
             if (mensajeLower.includes(palabraClave)) {
@@ -532,10 +618,10 @@ Matemáticas, Ciencias, Historia, Lengua, Inglés, Geografía, Arte, Música, Ed
             }
         }
 
-        // Enviar alerta al docente con la categoría detectada
+        // Enviar consulta al panel docente con la categoría detectada (si hay alguna)
         await this.enviarAlertaDocente(mensaje, categoriaDetectada);
 
-        // Devolver mensaje de alerta al estudiante
+        // Informar al estudiante que su consulta será atendida por un docente
         return `🔔 **Tu consulta será evaluada por un Docente**
 
 Gracias por tu pregunta. He registrado tu consulta y **en breve un docente se comunicará contigo** para brindarte la ayuda específica que necesitas.
@@ -552,11 +638,18 @@ Mientras tanto, puedes:
     }
 }
 
-// Inicializar el asistente cuando se carga la página
+/**
+ * ========================================
+ * INICIALIZACIÓN DE LA APLICACIÓN
+ * ========================================
+ */
+
+// Inicializar el asistente cuando el DOM esté completamente cargado
 document.addEventListener('DOMContentLoaded', () => {
+    // Crear instancia global del asistente virtual
     window.asistenteVirtual = new AsistenteVirtual();
-    
-    // Agregar estilos para el indicador de typing
+
+    // Agregar estilos CSS dinámicos para el indicador de "escribiendo"
     if (!document.getElementById('typing-styles')) {
         const style = document.createElement('style');
         style.id = 'typing-styles';

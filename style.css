@@ -1,9 +1,21 @@
+/**
+ * ========================================
+ * ESTILOS GLOBALES Y RESET
+ * ========================================
+ * Reset básico de estilos del navegador para consistencia
+ */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/**
+ * ========================================
+ * ESTILOS DEL BODY Y CONTENEDOR PRINCIPAL
+ * ========================================
+ * Define la apariencia general de la página
+ */
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
@@ -12,6 +24,7 @@ body {
     line-height: 1.6;
 }
 
+/* Contenedor principal centrado con ancho máximo */
 .container {
     max-width: 1000px;
     margin: 0 auto;
@@ -23,6 +36,12 @@ body {
     z-index: 1;
 }
 
+/**
+ * ========================================
+ * ESTILOS DEL ENCABEZADO
+ * ========================================
+ * Sección superior con título y mascota del asistente
+ */
 .header {
     text-align: center;
     margin-bottom: 25px;
@@ -90,7 +109,13 @@ body {
     font-weight: 600;
 }
 
-/* Estilos del Panel Docente */
+/**
+ * ========================================
+ * ESTILOS DEL PANEL DOCENTE
+ * ========================================
+ * Panel flotante en la esquina superior derecha para gestión de consultas
+ * Incluye estilos para consultas pendientes, categorías y botones de acción
+ */
 .teacher-panel {
     position: fixed !important;
     top: 20px !important;
@@ -242,6 +267,7 @@ body {
 .query-category.filosofia { background: #efebe9; color: #4e342e; }
 .query-category.general { background: #eceff1; color: #455a64; }
 
+/* Metadatos de cada consulta (fecha, categoría, ID) */
 .query-metadata {
     display: flex;
     flex-direction: column;
@@ -308,6 +334,12 @@ body {
     background: #e67e22;
 }
 
+/**
+ * ========================================
+ * ESTILOS DEL CONTENEDOR PRINCIPAL DEL CHAT
+ * ========================================
+ * Área principal donde se muestra la interfaz de chat
+ */
 .main {
     flex: 1;
     display: flex;
@@ -351,6 +383,12 @@ body {
     background: #a8a8a8;
 }
 
+/**
+ * ========================================
+ * ESTILOS DE MENSAJES DEL CHAT
+ * ========================================
+ * Apariencia de mensajes del usuario y del asistente
+ */
 .message {
     display: flex;
     margin-bottom: 18px;
@@ -449,7 +487,13 @@ body {
     color: #6c757d;
 }
 
-/* Sección de materias */
+/**
+ * ========================================
+ * ESTILOS DE BOTONES DE MATERIAS
+ * ========================================
+ * Grid de botones para seleccionar materias (matemáticas, ciencias, etc.)
+ * Cada materia tiene su propio color en hover
+ */
 .subjects-grid {
     padding: 20px;
     border-top: 1px solid #e9ecef;
@@ -554,7 +598,12 @@ body {
     color: white;
 }
 
-/* Botones de ayuda rápida */
+/**
+ * ========================================
+ * ESTILOS DE BOTONES DE AYUDA RÁPIDA
+ * ========================================
+ * Botones para acceso rápido a consejos, motivación, etc.
+ */
 .quick-buttons {
     padding: 15px 20px;
     border-top: 1px solid #e9ecef;
@@ -595,6 +644,12 @@ body {
     box-shadow: 0 4px 12px rgba(30, 60, 114, 0.3);
 }
 
+/**
+ * ========================================
+ * ESTILOS DEL CAMPO DE ENTRADA DE MENSAJES
+ * ========================================
+ * Input de texto y botón de envío en la parte inferior
+ */
 .input-container {
     padding: 18px 20px;
     border-top: 1px solid #e9ecef;
@@ -659,7 +714,12 @@ body {
     transform: none;
 }
 
-/* Responsive Design */
+/**
+ * ========================================
+ * ESTILOS RESPONSIVE
+ * ========================================
+ * Adaptación para tablets (768px) y móviles (480px)
+ */
 @media (max-width: 768px) {
     .container {
         padding: 10px;
@@ -781,6 +841,12 @@ body {
     }
 }
 
+/**
+ * ========================================
+ * ESTILOS ADICIONALES DEL PANEL DOCENTE
+ * ========================================
+ * Botones de acción y estados de carga/error
+ */
 .teacher-actions {
     display: flex;
     gap: 10px;
@@ -864,6 +930,12 @@ body {
     margin: 10px 0;
 }
 
+/**
+ * ========================================
+ * MEDIA QUERIES ADICIONALES PARA PANEL DOCENTE
+ * ========================================
+ * Ajustes específicos del panel en dispositivos pequeños
+ */
 @media (max-width: 768px) {
     .teacher-actions {
         flex-direction: column;

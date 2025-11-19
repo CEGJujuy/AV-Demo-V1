@@ -1,45 +1,77 @@
+/**
+ * ========================================
+ * PANEL DOCENTE - GESTIÓN DE CONSULTAS
+ * ========================================
+ *
+ * Este módulo gestiona la interfaz del panel docente, permitiendo:
+ * - Ver consultas pendientes de estudiantes
+ * - Responder consultas con mensajes personalizados
+ * - Marcar consultas como resueltas
+ * - Ver historial completo de consultas por materia
+ * - Exportar consultas a archivo de texto
+ *
+ * El panel se muestra después de 5 segundos y se actualiza automáticamente cada 30 segundos
+ */
+
+// Importar funciones de base de datos para gestión de consultas
 import { obtenerConsultasPendientes, marcarConsultaResuelta, marcarTodasResueltas, exportarConsultas, obtenerTodasLasConsultas } from './database.js';
 
+// Variable global para almacenar las consultas actuales en memoria
 let consultasActuales = [];
 
+/**
+ * Función principal para inicializar el panel docente
+ * - Configura event listeners para botones
+ * - Establece temporizadores para mostrar panel y actualizar consultas
+ * - Conecta todas las funcionalidades del panel
+ */
 export function inicializarPanelDocente() {
+    // Obtener referencias a elementos del DOM del panel docente
     const teacherPanel = document.getElementById('teacherPanel');
     const toggleBtn = document.getElementById('toggleTeacherPanel');
     const teacherContent = document.getElementById('teacherContent');
     const refreshBtn = document.getElementById('refreshQueries');
     const pendingQueries = document.getElementById('pendingQueries');
 
+    // Mostrar el panel docente después de 5 segundos (para no interferir con la carga inicial)
     setTimeout(() => {
         teacherPanel.style.display = 'block';
     }, 5000);
 
+    // Event listener para mostrar/ocultar el contenido del panel docente
     toggleBtn.addEventListener('click', () => {
         const isVisible = teacherContent.style.display !== 'none';
         teacherContent.style.display = isVisible ? 'none' : 'block';
         toggleBtn.textContent = isVisible ? '👨‍🏫 Panel Docente' : '👨‍🏫 Ocultar Panel';
 
+        // Actualizar consultas cuando se abre el panel
         if (!isVisible) {
             actualizarConsultasPendientes();
         }
     });
 
+    // Event listener para refrescar manualmente las consultas pendientes
     refreshBtn.addEventListener('click', actualizarConsultasPendientes);
 
+    // Configurar botón para marcar todas las consultas como resueltas
     const btnMarcarTodas = document.getElementById('markAllResolved');
     if (btnMarcarTodas) {
         btnMarcarTodas.addEventListener('click', marcarTodasComoResueltas);
     }
 
+    // Configurar botón para exportar consultas a archivo de texto
     const btnExportar = document.getElementById('exportQueries');
     if (btnExportar) {
         btnExportar.addEventListener('click', exportarConsultasDocente);
     }
 
+    // Configurar botón para ver todas las consultas (historial completo)
     const btnVerTodas = document.getElementById('showAllQueries');
     if (btnVerTodas) {
         btnVerTodas.addEventListener('click', mostrarTodasLasConsultas);
     }
 
+    // Actualización automática de consultas cada 30 segundos (si el panel está visible)
     setInterval(() => {
         if (teacherContent.style.display !== 'none') {
             actualizarConsultasPendientes();
@@ -47,19 +79,31 @@ export function inicializarPanelDocente() {
     }, 30000);
 }
 
+/**
+ * Función para actualizar y mostrar las consultas pendientes
+ * - Obtiene consultas de la base de datos
+ * - Genera HTML dinámico para cada consulta
+ * - Muestra información de categoría, fecha y mensaje
+ * - Incluye botones para responder o marcar como resuelta
+ */
 async function actualizarConsultasPendientes() {
     const pendingQueries = document.getElementById('pendingQueries');
 
+    // Mostrar mensaje de carga mientras se obtienen las consultas
     pendingQueries.innerHTML = '<p class="loading">Cargando consultas...</p>';
 
+    // Obtener consultas pendientes desde la base de datos
     const resultado = await obtenerConsultasPendientes();
 
+    // Si la consulta fue exitosa, procesar y mostrar las consultas
     if (resultado.success) {
         consultasActuales = resultado.data;
 
+        // Si no hay consultas, mostrar mensaje informativo
         if (consultasActuales.length === 0) {
             pendingQueries.innerHTML = '<p class="no-queries">✅ No hay consultas pendientes</p>';
         } else {
+            // Generar HTML para cada consulta pendiente
             let html = '';
             consultasActuales.forEach((consulta, index) => {
                 const fechaHora = new Date(consulta.fecha_hora).toLocaleString('es-ES');
@@ -111,6 +155,10 @@ async function actualizarConsultasPendientes() {
     }
 }
 
+/**
+ * Función para convertir el código de categoría en una etiqueta legible
+ * Mapea los identificadores de categorías a nombres en español
+ */
 function obtenerLabelCategoria(categoria) {
     const labels = {
         'matematicas': 'Matemáticas',
@@ -132,6 +180,13 @@ function obtenerLabelCategoria(categoria) {
     return labels[categoria] || 'General';
 }
 
+/**
+ * Función para abrir un modal donde el docente puede escribir una respuesta
+ * - Crea un modal dinámico con estilos inline
+ * - Muestra la consulta del estudiante
+ * - Incluye textarea para la respuesta del docente
+ * - Botones para enviar o cancelar
+ */
 window.abrirModalRespuesta = function(consultaId, mensajeConsulta, categoria) {
     const modal = document.createElement('div');
     modal.id = 'modal-respuesta';
@@ -232,6 +287,10 @@ window.abrirModalRespuesta = function(consultaId, mensajeConsulta, categoria) {
     document.getElementById('respuesta-textarea').focus();
 };
 
+/**
+ * Función para cerrar el modal de respuesta
+ * Elimina el modal del DOM
+ */
 window.cerrarModalRespuesta = function() {
     const modal = document.getElementById('modal-respuesta');
     if (modal) {
@@ -239,6 +298,12 @@ window.cerrarModalRespuesta = function() {
     }
 };
 
+/**
+ * Función para enviar la respuesta del docente a una consulta
+ * - Valida que se haya escrito una respuesta
+ * - Guarda la respuesta en la base de datos
+ * - Actualiza la lista de consultas pendientes
+ */
 window.enviarRespuesta = async function(consultaId) {
     const respuesta = document.getElementById('respuesta-textarea').value.trim();
 
@@ -260,6 +325,12 @@ window.enviarRespuesta = async function(consultaId) {
     }
 };
 
+/**
+ * Función para marcar una consulta específica como resuelta (sin respuesta)
+ * - Solicita confirmación al docente
+ * - Actualiza el estado en la base de datos
+ * - Refresca la lista de consultas
+ */
 window.marcarResueltoPorId = async function(consultaId) {
     const confirmacion = confirm('¿Marcar esta consulta como resuelta?');
     if (confirmacion) {
@@ -275,6 +346,12 @@ window.marcarResueltoPorId = async function(consultaId) {
     }
 };
 
+/**
+ * Función para marcar todas las consultas pendientes como resueltas
+ * - Solicita confirmación mostrando el número de consultas
+ * - Actualiza todas en la base de datos
+ * - Refresca la lista
+ */
 async function marcarTodasComoResueltas() {
     if (consultasActuales.length === 0) {
         alert('No hay consultas pendientes para marcar.');
@@ -296,6 +373,10 @@ async function marcarTodasComoResueltas() {
     }
 }
 
+/**
+ * Función para exportar todas las consultas a un archivo de texto
+ * Utiliza la función de exportación del módulo database.js
+ */
 async function exportarConsultasDocente() {
     const resultado = await exportarConsultas();
 
@@ -307,6 +388,13 @@ async function exportarConsultasDocente() {
     }
 }
 
+/**
+ * Función para mostrar un modal con todas las consultas (pendientes y resueltas)
+ * - Agrupa consultas por materia
+ * - Muestra estadísticas (total, resueltas, pendientes)
+ * - Ordena materias por número de consultas
+ * - Muestra detalles completos incluyendo respuestas del docente
+ */
 async function mostrarTodasLasConsultas() {
     const resultado = await obtenerTodasLasConsultas();
 
@@ -323,6 +411,7 @@ async function mostrarTodasLasConsultas() {
         return;
     }
 
+    // Agrupar consultas por materia/categoría
     const consultasPorMateria = {};
     consultas.forEach(consulta => {
         const materia = consulta.categoria || 'general';
@@ -396,6 +485,7 @@ async function mostrarTodasLasConsultas() {
             <div style="display: flex; flex-direction: column; gap: 25px;">
     `;
 
+    // Ordenar materias por cantidad de consultas (de mayor a menor)
     const materiasOrdenadas = Object.keys(consultasPorMateria).sort((a, b) => {
         return consultasPorMateria[b].length - consultasPorMateria[a].length;
     });
@@ -625,6 +715,10 @@ async function mostrarTodasLasConsultas() {
     document.body.appendChild(modal);
 }
 
+/**
+ * Función para cerrar el modal de todas las consultas
+ * Elimina el modal del DOM
+ */
 window.cerrarModalTodasConsultas = function() {
     const modal = document.getElementById('modal-todas-consultas');
     if (modal) {
