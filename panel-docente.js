@@ -1,4 +1,4 @@
-import { obtenerConsultasPendientes, marcarConsultaResuelta, marcarTodasResueltas, exportarConsultas } from './database.js';
+import { obtenerConsultasPendientes, marcarConsultaResuelta, marcarTodasResueltas, exportarConsultas, obtenerTodasLasConsultas } from './database.js';
 
 let consultasActuales = [];
 
@@ -33,6 +33,11 @@ export function inicializarPanelDocente() {
     const btnExportar = document.getElementById('exportQueries');
     if (btnExportar) {
         btnExportar.addEventListener('click', exportarConsultasDocente);
+    }
+
+    const btnVerTodas = document.getElementById('showAllQueries');
+    if (btnVerTodas) {
+        btnVerTodas.addEventListener('click', mostrarTodasLasConsultas);
     }
 
     setInterval(() => {
@@ -301,3 +306,328 @@ async function exportarConsultasDocente() {
         console.error('Error al exportar consultas:', resultado.error);
     }
 }
+
+async function mostrarTodasLasConsultas() {
+    const resultado = await obtenerTodasLasConsultas();
+
+    if (!resultado.success) {
+        alert('❌ Error al cargar las consultas. Por favor, intenta de nuevo.');
+        console.error('Error al obtener todas las consultas:', resultado.error);
+        return;
+    }
+
+    const consultas = resultado.data;
+
+    if (consultas.length === 0) {
+        alert('ℹ️ No hay consultas registradas en el sistema.');
+        return;
+    }
+
+    const consultasPorMateria = {};
+    consultas.forEach(consulta => {
+        const materia = consulta.categoria || 'general';
+        if (!consultasPorMateria[materia]) {
+            consultasPorMateria[materia] = [];
+        }
+        consultasPorMateria[materia].push(consulta);
+    });
+
+    const modal = document.createElement('div');
+    modal.id = 'modal-todas-consultas';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000000;
+        padding: 20px;
+    `;
+
+    let contenidoHTML = `
+        <div style="
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 1200px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.4);
+        ">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 3px solid #e74c3c; padding-bottom: 15px;">
+                <h2 style="color: #2c3e50; margin: 0; font-size: 1.8rem;">
+                    📊 Todas las Consultas por Materia
+                </h2>
+                <button
+                    onclick="cerrarModalTodasConsultas()"
+                    style="
+                        background: #e74c3c;
+                        color: white;
+                        border: none;
+                        border-radius: 50%;
+                        width: 40px;
+                        height: 40px;
+                        cursor: pointer;
+                        font-size: 1.2rem;
+                        font-weight: bold;
+                        transition: all 0.3s ease;
+                    "
+                    onmouseover="this.style.background='#c0392b'"
+                    onmouseout="this.style.background='#e74c3c'"
+                >
+                    ✕
+                </button>
+            </div>
+
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 25px;">
+                <p style="margin: 0; font-size: 1rem; color: #2c3e50;">
+                    <strong>📈 Total de consultas:</strong> ${consultas.length} |
+                    <strong>📚 Materias:</strong> ${Object.keys(consultasPorMateria).length} |
+                    <strong>✅ Resueltas:</strong> ${consultas.filter(c => c.estado === 'resuelta').length} |
+                    <strong>⏳ Pendientes:</strong> ${consultas.filter(c => c.estado === 'pendiente').length}
+                </p>
+            </div>
+
+            <div style="display: flex; flex-direction: column; gap: 25px;">
+    `;
+
+    const materiasOrdenadas = Object.keys(consultasPorMateria).sort((a, b) => {
+        return consultasPorMateria[b].length - consultasPorMateria[a].length;
+    });
+
+    materiasOrdenadas.forEach(materia => {
+        const consultasMateria = consultasPorMateria[materia];
+        const materiaLabel = obtenerLabelCategoria(materia);
+        const totalMateria = consultasMateria.length;
+        const resueltasMateria = consultasMateria.filter(c => c.estado === 'resuelta').length;
+        const pendientesMateria = consultasMateria.filter(c => c.estado === 'pendiente').length;
+
+        contenidoHTML += `
+            <div style="
+                background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+                border-radius: 12px;
+                padding: 20px;
+                border: 2px solid #e9ecef;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            ">
+                <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 15px;
+                    padding-bottom: 12px;
+                    border-bottom: 2px solid #e74c3c;
+                ">
+                    <h3 style="
+                        color: #e74c3c;
+                        margin: 0;
+                        font-size: 1.3rem;
+                        font-weight: 700;
+                    ">
+                        ${materiaLabel}
+                    </h3>
+                    <div style="
+                        display: flex;
+                        gap: 12px;
+                        font-size: 0.85rem;
+                        font-weight: 600;
+                    ">
+                        <span style="
+                            background: #3498db;
+                            color: white;
+                            padding: 4px 12px;
+                            border-radius: 20px;
+                        ">
+                            Total: ${totalMateria}
+                        </span>
+                        <span style="
+                            background: #27ae60;
+                            color: white;
+                            padding: 4px 12px;
+                            border-radius: 20px;
+                        ">
+                            ✅ ${resueltasMateria}
+                        </span>
+                        <span style="
+                            background: #f39c12;
+                            color: white;
+                            padding: 4px 12px;
+                            border-radius: 20px;
+                        ">
+                            ⏳ ${pendientesMateria}
+                        </span>
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+        `;
+
+        consultasMateria.forEach((consulta, index) => {
+            const fechaHora = new Date(consulta.fecha_hora).toLocaleString('es-ES', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            const estadoColor = consulta.estado === 'resuelta' ? '#27ae60' : '#f39c12';
+            const estadoTexto = consulta.estado === 'resuelta' ? '✅ Resuelta' : '⏳ Pendiente';
+
+            contenidoHTML += `
+                <div style="
+                    background: white;
+                    border-radius: 10px;
+                    padding: 15px;
+                    border-left: 4px solid ${estadoColor};
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+                ">
+                    <div style="
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: start;
+                        margin-bottom: 10px;
+                    ">
+                        <div style="flex: 1;">
+                            <div style="
+                                display: flex;
+                                align-items: center;
+                                gap: 10px;
+                                margin-bottom: 8px;
+                            ">
+                                <span style="
+                                    background: ${estadoColor};
+                                    color: white;
+                                    padding: 3px 10px;
+                                    border-radius: 12px;
+                                    font-size: 0.75rem;
+                                    font-weight: 600;
+                                ">
+                                    ${estadoTexto}
+                                </span>
+                                <span style="
+                                    color: #7f8c8d;
+                                    font-size: 0.8rem;
+                                    font-weight: 500;
+                                ">
+                                    📅 ${fechaHora}
+                                </span>
+                            </div>
+                            <div style="
+                                color: #2c3e50;
+                                font-size: 0.75rem;
+                                opacity: 0.7;
+                                margin-bottom: 8px;
+                            ">
+                                🆔 ID: ${consulta.id.substring(0, 12)}...
+                            </div>
+                            <div style="
+                                color: #2c3e50;
+                                line-height: 1.6;
+                                font-size: 0.95rem;
+                                margin-bottom: 10px;
+                            ">
+                                <strong>💬 Consulta:</strong><br>
+                                <span style="
+                                    display: block;
+                                    margin-top: 5px;
+                                    padding: 10px;
+                                    background: #f8f9fa;
+                                    border-radius: 6px;
+                                    font-style: italic;
+                                ">
+                                    "${consulta.mensaje}"
+                                </span>
+                            </div>
+                            ${consulta.respuesta_docente ? `
+                                <div style="
+                                    margin-top: 12px;
+                                    padding: 12px;
+                                    background: #e8f5e9;
+                                    border-radius: 8px;
+                                    border-left: 3px solid #27ae60;
+                                ">
+                                    <div style="
+                                        color: #27ae60;
+                                        font-weight: 700;
+                                        margin-bottom: 6px;
+                                        font-size: 0.9rem;
+                                    ">
+                                        👨‍🏫 Respuesta del docente:
+                                    </div>
+                                    <div style="
+                                        color: #2c3e50;
+                                        line-height: 1.6;
+                                        font-size: 0.9rem;
+                                    ">
+                                        "${consulta.respuesta_docente}"
+                                    </div>
+                                    ${consulta.fecha_respuesta ? `
+                                        <div style="
+                                            margin-top: 8px;
+                                            color: #7f8c8d;
+                                            font-size: 0.75rem;
+                                        ">
+                                            📅 Respondida: ${new Date(consulta.fecha_respuesta).toLocaleString('es-ES')}
+                                        </div>
+                                    ` : ''}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        contenidoHTML += `
+                </div>
+            </div>
+        `;
+    });
+
+    contenidoHTML += `
+            </div>
+
+            <div style="
+                margin-top: 25px;
+                padding-top: 20px;
+                border-top: 2px solid #e9ecef;
+                text-align: center;
+            ">
+                <button
+                    onclick="cerrarModalTodasConsultas()"
+                    style="
+                        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+                        color: white;
+                        border: none;
+                        border-radius: 8px;
+                        padding: 12px 30px;
+                        font-size: 1rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+                    "
+                    onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 5px 15px rgba(0, 0, 0, 0.3)'"
+                    onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 3px 10px rgba(0, 0, 0, 0.2)'"
+                >
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    `;
+
+    modal.innerHTML = contenidoHTML;
+    document.body.appendChild(modal);
+}
+
+window.cerrarModalTodasConsultas = function() {
+    const modal = document.getElementById('modal-todas-consultas');
+    if (modal) {
+        modal.remove();
+    }
+};

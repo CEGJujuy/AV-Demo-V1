@@ -824,6 +824,17 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
+.show-all-btn {
+    background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
+    color: white;
+}
+
+.show-all-btn:hover {
+    background: linear-gradient(135deg, #8e44ad 0%, #7d3c98 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .export-btn {
     background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
     color: #333;
@@ -859,6 +870,7 @@ body {
 
     .refresh-btn,
     .mark-all-btn,
+    .show-all-btn,
     .export-btn {
         width: 100%;
     }

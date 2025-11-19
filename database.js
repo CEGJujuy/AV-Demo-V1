@@ -52,6 +52,26 @@ export async function obtenerConsultasPendientes() {
     }
 }
 
+export async function obtenerTodasLasConsultas() {
+    try {
+        const { data, error } = await supabase
+            .from('consultas_pendientes')
+            .select('*')
+            .order('categoria', { ascending: true })
+            .order('fecha_hora', { ascending: false });
+
+        if (error) {
+            console.error('Error al obtener todas las consultas:', error);
+            return { success: false, error, data: [] };
+        }
+
+        return { success: true, data: data || [] };
+    } catch (err) {
+        console.error('Error al obtener todas las consultas:', err);
+        return { success: false, error: err, data: [] };
+    }
+}
+
 export async function marcarConsultaResuelta(id, respuestaDocente = null) {
     try {
         const updateData = {
