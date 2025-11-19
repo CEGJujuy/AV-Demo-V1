@@ -29,7 +29,11 @@
                         <div id="pendingQueries" class="pending-queries">
                             <p>No hay consultas pendientes</p>
                         </div>
-                        <button id="refreshQueries" class="refresh-btn">🔄 Actualizar</button>
+                        <div class="teacher-actions">
+                            <button id="refreshQueries" class="refresh-btn">🔄 Actualizar</button>
+                            <button id="markAllResolved" class="mark-all-btn">✅ Marcar Todas</button>
+                            <button id="exportQueries" class="export-btn">📄 Exportar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -135,89 +139,12 @@
         </main>
     </div>
 
-    <script src="script.js"></script>
-    <script>
-        // Funcionalidad del panel docente
+    <script type="module" src="script.js"></script>
+    <script type="module">
+        import { inicializarPanelDocente } from './panel-docente.js';
+
         document.addEventListener('DOMContentLoaded', () => {
-            const teacherPanel = document.getElementById('teacherPanel');
-            const toggleBtn = document.getElementById('toggleTeacherPanel');
-            const teacherContent = document.getElementById('teacherContent');
-            const refreshBtn = document.getElementById('refreshQueries');
-            const pendingQueries = document.getElementById('pendingQueries');
-
-            // Mostrar panel docente después de 5 segundos (para demostración)
-            setTimeout(() => {
-                teacherPanel.style.display = 'block';
-            }, 5000);
-
-            // Toggle del panel docente
-            toggleBtn.addEventListener('click', () => {
-                const isVisible = teacherContent.style.display !== 'none';
-                teacherContent.style.display = isVisible ? 'none' : 'block';
-                toggleBtn.textContent = isVisible ? '👨‍🏫 Panel Docente' : '👨‍🏫 Ocultar Panel';
-                
-                if (!isVisible) {
-                    actualizarConsultasPendientes();
-                }
-            });
-
-            // Actualizar consultas pendientes
-            refreshBtn.addEventListener('click', actualizarConsultasPendientes);
-
-            function actualizarConsultasPendientes() {
-                const consultas = obtenerConsultasPendientesDocente();
-                
-                if (consultas.length === 0) {
-                    pendingQueries.innerHTML = '<p class="no-queries">✅ No hay consultas pendientes</p>';
-                } else {
-                    let html = '';
-                    consultas.forEach((consulta, index) => {
-                        html += `
-                            <div class="query-item">
-                                <div class="query-header">
-                                    <span class="query-number">#${index + 1}</span>
-                                    <span class="query-time">${consulta.fecha}</span>
-                                </div>
-                                <div class="query-message">"${consulta.mensaje}"</div>
-                                <div class="query-actions">
-                                    <button class="respond-btn" onclick="responderConsulta(${index})">
-                                        📝 Responder
-                                    </button>
-                                    <button class="mark-resolved-btn" onclick="marcarResuelto(${index})">
-                                        ✅ Marcar como resuelto
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                    });
-                    pendingQueries.innerHTML = html;
-                }
-            }
-
-            // Funciones globales para el manejo de consultas
-            window.responderConsulta = function(index) {
-                const respuesta = prompt('Escribe tu respuesta para el estudiante:');
-                if (respuesta) {
-                    alert(`Respuesta enviada al estudiante: "${respuesta}"`);
-                    // En un entorno real, aquí se enviaría la respuesta al estudiante
-                    console.log(`📧 Respuesta del docente enviada: ${respuesta}`);
-                }
-            };
-
-            window.marcarResuelto = function(index) {
-                if (window.asistenteVirtual) {
-                    window.asistenteVirtual.consultasNoReconocidas.splice(index, 1);
-                    actualizarConsultasPendientes();
-                    alert('Consulta marcada como resuelta');
-                }
-            };
-
-            // Actualizar automáticamente cada 30 segundos
-            setInterval(() => {
-                if (teacherContent.style.display !== 'none') {
-                    actualizarConsultasPendientes();
-                }
-            }, 30000);
+            inicializarPanelDocente();
         });
     </script>
 </body>

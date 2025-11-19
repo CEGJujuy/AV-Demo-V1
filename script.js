@@ -1,3 +1,5 @@
+import { guardarConsultaPendiente, obtenerConsultasPendientes, marcarConsultaResuelta, marcarTodasResueltas, exportarConsultas, guardarMensajeHistorial } from './database.js';
+
 class AsistenteVirtual {
     constructor() {
         this.respuestas = {
@@ -332,7 +334,7 @@ class AsistenteVirtual {
         this.enviarMensaje();
     }
 
-    enviarMensaje() {
+    async enviarMensaje() {
         const mensaje = this.messageInput.value.trim();
         if (!mensaje) return;
 
@@ -346,9 +348,9 @@ class AsistenteVirtual {
         // Simular typing delay
         this.mostrarTyping();
 
-        setTimeout(() => {
+        setTimeout(async () => {
             this.ocultarTyping();
-            const respuesta = this.procesarMensaje(mensaje);
+            const respuesta = await this.procesarMensaje(mensaje);
             this.mostrarMensaje(respuesta, 'assistant');
         }, 1000 + Math.random() * 1000);
     }
@@ -406,41 +408,42 @@ class AsistenteVirtual {
     }
 
     // Función para enviar alerta al docente
-    enviarAlertaDocente(consulta) {
-        // Guardar la consulta no reconocida
+    async enviarAlertaDocente(consulta) {
+        const fecha = new Date().toLocaleDateString('es-ES');
+        const hora = this.obtenerHora();
+
         const consultaInfo = {
             mensaje: consulta,
-            fecha: new Date().toLocaleString('es-ES'),
-            hora: this.obtenerHora()
+            fecha: fecha,
+            hora: hora
         };
-        
+
         this.consultasNoReconocidas.push(consultaInfo);
-        
-        // En un entorno real, aquí se enviaría la alerta al docente
-        // Por ejemplo, mediante una API, email, o sistema de notificaciones
+
+        const resultado = await guardarConsultaPendiente(consulta, fecha, hora);
+
+        if (resultado.success) {
+            console.log('✅ Consulta guardada en Supabase:', resultado.data);
+        } else {
+            console.error('❌ Error al guardar consulta en Supabase:', resultado.error);
+        }
+
+        await guardarMensajeHistorial(consulta, 'usuario', null, false);
+
         console.log('🚨 ALERTA DOCENTE - Nueva consulta no reconocida:', consultaInfo);
-        
-        // Simular notificación al docente (en un entorno real sería una llamada a API)
-        this.simularNotificacionDocente(consultaInfo);
     }
 
-    // Simular notificación al docente
-    simularNotificacionDocente(consultaInfo) {
-        // En un entorno real, esto sería una llamada a una API o servicio de notificaciones
-        setTimeout(() => {
-            console.log(`📧 Notificación enviada al docente:
-            Estudiante realizó consulta: "${consultaInfo.mensaje}"
-            Fecha y hora: ${consultaInfo.fecha}
-            Estado: Pendiente de respuesta`);
-        }, 500);
-    }
 
     // Función para mostrar consultas pendientes (para uso del docente)
-    obtenerConsultasPendientes() {
+    async obtenerConsultasPendientes() {
+        const resultado = await obtenerConsultasPendientes();
+        if (resultado.success) {
+            return resultado.data;
+        }
         return this.consultasNoReconocidas;
     }
 
-    procesarMensaje(mensaje) {
+    async procesarMensaje(mensaje) {
         const mensajeLower = mensaje.toLowerCase();
 
         // Buscar palabras clave en el mensaje
@@ -455,7 +458,10 @@ class AsistenteVirtual {
         // Si encontramos una categoría, devolver respuesta aleatoria
         if (categoriaEncontrada && this.respuestas[categoriaEncontrada]) {
             const respuestas = this.respuestas[categoriaEncontrada];
-            return respuestas[Math.floor(Math.random() * respuestas.length)];
+            const respuesta = respuestas[Math.floor(Math.random() * respuestas.length)];
+            await guardarMensajeHistorial(mensaje, 'usuario', categoriaEncontrada, true);
+            await guardarMensajeHistorial(respuesta, 'asistente', categoriaEncontrada, true);
+            return respuesta;
         }
 
         // Respuestas específicas para preguntas comunes
@@ -517,7 +523,7 @@ Matemáticas, Ciencias, Historia, Lengua, Inglés, Geografía, Arte, Música, Ed
 
         // Si llegamos aquí, la consulta no fue reconocida
         // Enviar alerta al docente
-        this.enviarAlertaDocente(mensaje);
+        await this.enviarAlertaDocente(mensaje);
 
         // Devolver mensaje de alerta al estudiante
         return `🔔 **Tu consulta será evaluada por un Docente**
@@ -568,12 +574,3 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Función global para que el docente pueda acceder a las consultas pendientes
-function obtenerConsultasPendientesDocente() {
-    if (window.asistenteVirtual) {
-        const consultas = window.asistenteVirtual.obtenerConsultasPendientes();
-        console.log('📋 Consultas pendientes para el docente:', consultas);
-        return consultas;
-    }
-    return [];
-}
