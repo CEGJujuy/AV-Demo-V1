@@ -791,6 +791,7 @@ body {
 
 .refresh-btn,
 .mark-all-btn,
+.show-all-btn,
 .export-btn {
     padding: 10px 20px;
     border: none;
