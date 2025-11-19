@@ -90,10 +90,10 @@ body {
 
 /* Estilos del Panel Docente */
 .teacher-panel {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    z-index: 1000;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
 }
 
 .teacher-btn {
@@ -115,27 +115,48 @@ body {
 }
 
 .teacher-content {
-    position: absolute;
-    top: 45px;
-    right: 0;
+    position: fixed;
+    top: 70px;
+    right: 20px;
     background: white;
     border-radius: 15px;
     padding: 20px;
     min-width: 500px;
     max-width: 600px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-    border: 1px solid #e9ecef;
-    max-height: 600px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border: 2px solid #e74c3c;
+    max-height: calc(100vh - 100px);
     overflow-y: auto;
-    z-index: 1001;
+    z-index: 9998;
 }
 
 .teacher-content h3 {
     color: #2c3e50;
     margin-bottom: 15px;
     font-size: 1.1rem;
-    border-bottom: 2px solid #e9ecef;
+    border-bottom: 2px solid #e74c3c;
     padding-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.teacher-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.teacher-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+.teacher-content::-webkit-scrollbar-thumb {
+    background: #e74c3c;
+    border-radius: 10px;
+}
+
+.teacher-content::-webkit-scrollbar-thumb:hover {
+    background: #c0392b;
 }
 
 .pending-queries {
@@ -836,5 +857,34 @@ body {
     .mark-all-btn,
     .export-btn {
         width: 100%;
+    }
+
+    .teacher-panel {
+        top: 10px;
+        right: 10px;
+    }
+
+    .teacher-content {
+        top: 60px;
+        right: 10px;
+        left: 10px;
+        min-width: unset;
+        max-width: unset;
+        width: calc(100vw - 40px);
+        max-height: calc(100vh - 80px);
+    }
+}
+
+@media (max-width: 480px) {
+    .teacher-content {
+        padding: 15px;
+    }
+
+    .query-item {
+        padding: 12px;
+    }
+
+    .query-metadata {
+        font-size: 0.75rem;
     }
 }
