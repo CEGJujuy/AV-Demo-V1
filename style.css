@@ -494,108 +494,186 @@ body {
  * Grid de botones para seleccionar materias (matemáticas, ciencias, etc.)
  * Cada materia tiene su propio color en hover
  */
+
+/* Contenedor principal de la sección de materias */
 .subjects-grid {
-    padding: 20px;
-    border-top: 1px solid #e9ecef;
-    background: #f8f9fa;
+    padding: 20px;                      /* Espacio interno alrededor del contenido */
+    border-top: 1px solid #e9ecef;      /* Línea separadora superior */
+    background: #f8f9fa;                /* Fondo gris claro para diferenciar sección */
 }
 
+/* Título de la sección "Materias Disponibles" */
 .subjects-title {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 15px;
-    text-align: center;
+    font-size: 1rem;                    /* Tamaño de fuente del título */
+    font-weight: 600;                   /* Peso semi-negrita para destacar */
+    color: #2c3e50;                     /* Color gris oscuro */
+    margin-bottom: 15px;                /* Espacio debajo del título */
+    text-align: center;                 /* Centrar el texto */
 }
 
+/* Grid contenedor de todos los botones de materias */
 .subjects-buttons {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 10px;
-    margin-bottom: 15px;
+    display: grid;                                              /* Usar sistema de grid CSS */
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); /* Grid responsive: mínimo 140px por columna, se ajusta automáticamente */
+    gap: 10px;                                                  /* Espacio de 10px entre botones */
+    margin-bottom: 15px;                                        /* Espacio debajo del grid */
 }
 
+/**
+ * ESTILOS BASE DE BOTONES DE MATERIAS
+ * -------------------------------------
+ * Estos estilos se aplican a TODOS los botones de materias en su estado normal
+ */
 .subject-btn {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    border: 2px solid #e9ecef;
-    border-radius: 12px;
-    padding: 12px 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    min-height: 70px;
+    /* --- APARIENCIA VISUAL --- */
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);  /* Gradiente sutil de blanco a gris claro (135° diagonal) */
+    border: 2px solid #e9ecef;                                      /* Borde gris claro de 2px */
+    border-radius: 12px;                                            /* Esquinas redondeadas para aspecto moderno */
+    padding: 12px 8px;                                              /* Espacio interno: 12px arriba/abajo, 8px izq/der */
+
+    /* --- CURSOR E INTERACCIÓN --- */
+    cursor: pointer;                                                /* Cambiar cursor a manita al pasar sobre el botón */
+
+    /* --- TRANSICIÓN SUAVE --- */
+    transition: all 0.3s ease;                                      /* Transición suave de 0.3 segundos para TODAS las propiedades que cambien */
+                                                                    /* Esto incluye: transform, box-shadow, border-color, background */
+                                                                    /* 'ease' hace que la animación inicie lento, acelere, y termine lento */
+
+    /* --- LAYOUT INTERNO (FLEXBOX) --- */
+    display: flex;                                                  /* Usar flexbox para organizar icono y texto */
+    flex-direction: column;                                         /* Apilar elementos verticalmente (icono arriba, texto abajo) */
+    align-items: center;                                            /* Centrar elementos horizontalmente */
+    gap: 6px;                                                       /* Espacio de 6px entre el icono y el texto */
+    min-height: 70px;                                               /* Altura mínima para mantener consistencia visual */
 }
 
+/**
+ * EFECTO HOVER - ESTADO AL POSICIONAR EL CURSOR
+ * -----------------------------------------------
+ * Estos estilos se aplican cuando el usuario posiciona el cursor sobre cualquier botón de materia
+ *
+ * EFECTOS VISUALES QUE OCURREN:
+ * 1. ELEVACIÓN: El botón se "levanta" 2px hacia arriba
+ * 2. SOMBRA: Aparece una sombra más pronunciada simulando profundidad
+ * 3. BORDE: El color del borde cambia a azul oscuro
+ *
+ * NOTA: El cambio de color de fondo se define específicamente para cada materia más abajo
+ */
 .subject-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-    border-color: #1e3c72;
+    /* --- EFECTO DE ELEVACIÓN --- */
+    transform: translateY(-2px);                    /* Mover el botón 2 píxeles HACIA ARRIBA (valor negativo) */
+                                                    /* translateY es una transformación CSS que mueve elementos verticalmente */
+                                                    /* Esto crea la ilusión de que el botón se "levanta" del fondo */
+
+    /* --- EFECTO DE SOMBRA (PROFUNDIDAD) --- */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);     /* Agregar sombra debajo del botón para simular elevación */
+                                                    /* Parámetros: desplazamiento-X, desplazamiento-Y, difuminado, color */
+                                                    /* 0 = sin desplazamiento horizontal */
+                                                    /* 6px = sombra proyectada 6px hacia abajo */
+                                                    /* 20px = difuminado amplio para sombra suave */
+                                                    /* rgba(0,0,0,0.1) = negro con 10% opacidad (sombra sutil) */
+
+    /* --- CAMBIO DE COLOR DEL BORDE --- */
+    border-color: #1e3c72;                         /* Cambiar borde a azul oscuro para resaltar el botón activo */
+                                                    /* Este es el color principal de la aplicación */
+
+    /* NOTA IMPORTANTE: Todos estos cambios ocurren suavemente gracias a la propiedad 'transition'
+       definida en .subject-btn, que hace que la transición dure 0.3 segundos */
 }
 
+/* Estilo del icono dentro del botón (emoji de la materia) */
 .subject-icon {
-    font-size: 1.5rem;
+    font-size: 1.5rem;                              /* Tamaño grande para que el icono sea visible y atractivo */
 }
 
+/* Estilo del nombre de la materia dentro del botón */
 .subject-name {
-    font-size: 0.8rem;
-    font-weight: 500;
-    color: #2c3e50;
-    text-align: center;
+    font-size: 0.8rem;                              /* Tamaño de fuente pequeño */
+    font-weight: 500;                               /* Peso medio de la fuente */
+    color: #2c3e50;                                 /* Color gris oscuro para buena legibilidad */
+    text-align: center;                             /* Centrar el texto */
 }
 
-/* Colores específicos para cada materia */
+/**
+ * ========================================
+ * COLORES ESPECÍFICOS POR MATERIA (HOVER)
+ * ========================================
+ *
+ * Cada materia tiene un gradiente de colores único que aparece al hacer hover.
+ * Estos estilos SE COMBINAN con los efectos de .subject-btn:hover definidos arriba.
+ *
+ * FUNCIONAMIENTO:
+ * - Cuando el usuario pasa el cursor sobre un botón de materia específica,
+ *   se aplican AMBOS estilos: el .subject-btn:hover (elevación y sombra)
+ *   Y el estilo específico de la materia (gradiente de color único)
+ *
+ * ESTRUCTURA DEL GRADIENTE:
+ * - linear-gradient(135deg, color1, color2)
+ * - 135deg = ángulo diagonal (de esquina superior izquierda a inferior derecha)
+ * - 0% = color inicial en la esquina superior izquierda
+ * - 100% = color final en la esquina inferior derecha
+ */
+
+/* MATEMÁTICAS: Gradiente rosa suave */
 .subject-btn.math:hover {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
-    border-color: #ff6b6b;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);  /* Rosa coral → Rosa pastel claro */
+    border-color: #ff6b6b;                                           /* Borde rojo coral para contraste */
 }
 
+/* CIENCIAS: Gradiente turquesa/aguamarina */
 .subject-btn.science:hover {
-    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-    border-color: #20bf6b;
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);  /* Turquesa claro → Rosa muy pálido */
+    border-color: #20bf6b;                                           /* Borde verde brillante (color ciencia) */
 }
 
+/* HISTORIA: Gradiente naranja cálido */
 .subject-btn.history:hover {
-    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
-    border-color: #f39c12;
+    background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);  /* Crema claro → Naranja melocotón */
+    border-color: #f39c12;                                           /* Borde naranja dorado */
 }
 
+/* LENGUA: Gradiente púrpura/lavanda */
 .subject-btn.language:hover {
-    background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);
-    border-color: #9b59b6;
+    background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%);  /* Púrpura claro → Amarillo muy pálido */
+    border-color: #9b59b6;                                           /* Borde púrpura (color literatura) */
 }
 
+/* INGLÉS: Gradiente azul cielo/celeste */
 .subject-btn.english:hover {
-    background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
-    border-color: #3498db;
+    background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);  /* Cyan claro → Azul cielo */
+    border-color: #3498db;                                           /* Borde azul brillante (idiomas internacionales) */
 }
 
+/* GEOGRAFÍA: Gradiente verde/azul (tierra y océano) */
 .subject-btn.geography:hover {
-    background: linear-gradient(135deg, #c2e59c 0%, #64b3f4 100%);
-    border-color: #27ae60;
+    background: linear-gradient(135deg, #c2e59c 0%, #64b3f4 100%);  /* Verde lima claro → Azul cielo (naturaleza/agua) */
+    border-color: #27ae60;                                           /* Borde verde natural */
 }
 
+/* EDUCACIÓN FÍSICA: Gradiente naranja energético */
 .subject-btn.pe:hover {
-    background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
-    border-color: #e67e22;
+    background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);  /* Naranja claro → Naranja oscuro (energía/movimiento) */
+    border-color: #e67e22;                                           /* Borde naranja intenso */
 }
 
+/* ARTE: Gradiente rosa/rojo vibrante */
 .subject-btn.art:hover {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    border-color: #e74c3c;
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);  /* Magenta claro → Rojo rosado (creatividad) */
+    border-color: #e74c3c;                                           /* Borde rojo artístico */
 }
 
+/* MÚSICA: Gradiente azul brillante */
 .subject-btn.music:hover {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    border-color: #1abc9c;
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);  /* Azul claro → Cyan brillante (armonía) */
+    border-color: #1abc9c;                                           /* Borde turquesa */
 }
 
+/* FILOSOFÍA: Gradiente azul oscuro/profundo */
 .subject-btn.philosophy:hover {
-    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-    border-color: #6c5ce7;
-    color: white;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);  /* Azul marino → Azul medio (pensamiento profundo) */
+    border-color: #6c5ce7;                                           /* Borde púrpura filosófico */
+    color: white;                                                    /* Texto blanco para contraste con fondo oscuro */
+    /* NOTA: Esta es la única materia con texto blanco debido al fondo oscuro */
 }
 
 /**
