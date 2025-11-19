@@ -87,6 +87,34 @@ class AsistenteVirtual:
                 "Aprende los continentes, océanos, países y capitales principales.",
                 "El clima se ve afectado por la latitud, altitud, corrientes marinas y vientos."
             ],
+            # Categoría de respuestas sobre educación física.
+            "educacion_fisica": [
+                "La educación física es esencial para el desarrollo integral.",
+                "Mantén una rutina de ejercicio regular para mejorar tu salud.",
+                "El calentamiento previo previene lesiones durante la actividad física.",
+                "Una buena hidratación es fundamental durante el ejercicio."
+            ],
+            # Categoría de respuestas sobre arte.
+            "arte": [
+                "El arte es expresión y creatividad sin límites.",
+                "Observa obras de diferentes artistas para inspirarte.",
+                "Practica diferentes técnicas: dibujo, pintura, escultura.",
+                "El arte refleja la sociedad y la época en la que se crea."
+            ],
+            # Categoría de respuestas sobre música.
+            "musica": [
+                "La música es el lenguaje universal de las emociones.",
+                "Practica regularmente para mejorar tu técnica musical.",
+                "Aprende teoría musical: notas, escalas, ritmos.",
+                "Escucha diferentes géneros musicales para ampliar tu cultura."
+            ],
+            # Categoría de respuestas sobre filosofía.
+            "filosofia": [
+                "La filosofía te enseña a pensar críticamente.",
+                "Cuestiona todo y busca comprender el porqué de las cosas.",
+                "Los grandes filósofos nos enseñan diferentes formas de ver el mundo.",
+                "La ética y la moral son fundamentales en la filosofía."
+            ],
             # Categoría de respuestas sobre técnicas y consejos de estudio.
             "consejos_estudio": [
                 "Crea un horario de estudio y síguelo consistentemente.",
@@ -101,6 +129,13 @@ class AsistenteVirtual:
                 "Haz un cronograma de repaso distribuyendo las materias por días.",
                 "Practica con exámenes anteriores o ejercicios similares.",
                 "Durante el examen: lee bien las preguntas y administra tu tiempo."
+            ],
+            # Categoría de respuestas sobre organización del tiempo.
+            "tiempo": [
+                "Organiza tu tiempo con un calendario semanal.",
+                "Prioriza las tareas más importantes primero.",
+                "Divide proyectos grandes en tareas más pequeñas.",
+                "Usa recordatorios y alarmas para no olvidar compromisos importantes."
             ],
             # Categoría de respuestas motivacionales.
             "motivacion": [
@@ -175,6 +210,26 @@ class AsistenteVirtual:
             "continentes": "geografia",
             "clima": "geografia",
 
+            # Palabras relacionadas con educación física asociadas a "educacion_fisica".
+            "educación física": "educacion_fisica",
+            "deporte": "educacion_fisica",
+            "ejercicio": "educacion_fisica",
+
+            # Palabras relacionadas con arte asociadas a "arte".
+            "arte": "arte",
+            "pintura": "arte",
+            "dibujo": "arte",
+
+            # Palabras relacionadas con música asociadas a "musica".
+            "música": "musica",
+            "canción": "musica",
+            "instrumento": "musica",
+
+            # Palabras relacionadas con filosofía asociadas a "filosofia".
+            "filosofía": "filosofia",
+            "ética": "filosofia",
+            "moral": "filosofia",
+
             # Palabras relacionadas con estudio y técnicas de estudio asociadas a "consejos_estudio".
             "estudiar": "consejos_estudio",
             "estudio": "consejos_estudio",
@@ -187,6 +242,11 @@ class AsistenteVirtual:
             "examen": "examenes",
             "prueba": "examenes",
             "evaluación": "examenes",
+
+            # Palabras relacionadas con organización del tiempo asociadas a "tiempo".
+            "tiempo": "tiempo",
+            "organizar": "tiempo",
+            "planificar": "tiempo",
 
             # Palabras relacionadas con motivación asociadas a "motivacion".
             "motivación": "motivacion",
@@ -228,7 +288,10 @@ class AsistenteVirtual:
                 fecha TEXT NOT NULL,
                 hora TEXT NOT NULL,
                 timestamp TEXT NOT NULL,
-                estado TEXT NOT NULL
+                estado TEXT NOT NULL,
+                categoria TEXT,
+                respuesta_docente TEXT,
+                fecha_respuesta TEXT
             )
         """)
 
@@ -243,7 +306,7 @@ class AsistenteVirtual:
         try:
             # Selecciona todas las columnas relevantes de las consultas con estado "pendiente".
             self.cursor.execute("""
-                SELECT mensaje, fecha, hora, timestamp, estado
+                SELECT id, mensaje, fecha, hora, timestamp, estado, categoria, respuesta_docente, fecha_respuesta
                 FROM consultas_pendientes
                 WHERE estado = 'pendiente'
                 ORDER BY timestamp DESC
@@ -252,22 +315,64 @@ class AsistenteVirtual:
             filas = self.cursor.fetchall()
             # Recorre las filas obtenidas para convertirlas en diccionarios.
             for fila in filas:
-                mensaje, fecha, hora, ts, estado = fila
+                id_consulta, mensaje, fecha, hora, ts, estado, categoria, respuesta, fecha_resp = fila
                 # Agrega cada consulta pendiente a la lista en memoria.
                 self.consultas_no_reconocidas.append({
+                    "id": id_consulta,
                     "mensaje": mensaje,
                     "fecha": fecha,
                     "hora": hora,
                     "timestamp": ts,
-                    "estado": estado
+                    "estado": estado,
+                    "categoria": categoria,
+                    "respuesta_docente": respuesta,
+                    "fecha_respuesta": fecha_resp
                 })
         except Exception as e:
             # En caso de error, lo muestra por consola e inicializa la lista vacía.
             print(f"Error al cargar consultas desde la BD: {e}")
             self.consultas_no_reconocidas = []
 
+    # Método para obtener todas las consultas (pendientes y resueltas)
+    def obtener_todas_consultas(self):
+        """Obtener todas las consultas de la base de datos"""
+        try:
+            self.cursor.execute("""
+                SELECT id, mensaje, fecha, hora, timestamp, estado, categoria, respuesta_docente, fecha_respuesta
+                FROM consultas_pendientes
+                ORDER BY categoria, timestamp DESC
+            """)
+            filas = self.cursor.fetchall()
+            consultas = []
+            for fila in filas:
+                id_consulta, mensaje, fecha, hora, ts, estado, categoria, respuesta, fecha_resp = fila
+                consultas.append({
+                    "id": id_consulta,
+                    "mensaje": mensaje,
+                    "fecha": fecha,
+                    "hora": hora,
+                    "timestamp": ts,
+                    "estado": estado,
+                    "categoria": categoria or "general",
+                    "respuesta_docente": respuesta,
+                    "fecha_respuesta": fecha_resp
+                })
+            return consultas
+        except Exception as e:
+            print(f"Error al obtener todas las consultas: {e}")
+            return []
+
+    # Método para detectar la categoría de un mensaje
+    def detectar_categoria(self, mensaje):
+        """Detectar la categoría del mensaje según las palabras clave"""
+        mensaje_lower = mensaje.lower()
+        for palabra_clave, categoria in self.palabras_clave.items():
+            if palabra_clave in mensaje_lower:
+                return categoria
+        return "general"
+
     # Método que registra en BD y notifica al docente una consulta no reconocida por el asistente.
-    def enviar_alerta_docente(self, consulta):
+    def enviar_alerta_docente(self, consulta, categoria="general"):
         """Registrar en BD y notificar al docente sobre una consulta no reconocida"""
         # Obtiene la fecha y hora actuales del sistema.
         ahora = datetime.datetime.now()
@@ -277,26 +382,32 @@ class AsistenteVirtual:
             "fecha": ahora.strftime("%d/%m/%Y"),
             "hora": ahora.strftime("%H:%M:%S"),
             "timestamp": ahora.isoformat(),
-            "estado": "pendiente"
+            "estado": "pendiente",
+            "categoria": categoria
         }
 
         # Intenta insertar la consulta en la tabla consultas_pendientes de la base de datos.
         try:
             self.cursor.execute("""
-                INSERT INTO consultas_pendientes (mensaje, fecha, hora, timestamp, estado)
-                VALUES (?, ?, ?, ?, ?)
+                INSERT INTO consultas_pendientes (mensaje, fecha, hora, timestamp, estado, categoria)
+                VALUES (?, ?, ?, ?, ?, ?)
             """, (
                 consulta_info["mensaje"],
                 consulta_info["fecha"],
                 consulta_info["hora"],
                 consulta_info["timestamp"],
-                consulta_info["estado"]
+                consulta_info["estado"],
+                consulta_info["categoria"]
             ))
             # Confirma el registro de la nueva consulta en la base de datos.
             self.conn.commit()
+
+            # Obtiene el ID de la consulta recién insertada
+            consulta_info["id"] = self.cursor.lastrowid
         except Exception as e:
             # Si ocurre un error al guardar en la base de datos, se informa por consola.
             print(f"Error al guardar consulta en BD: {e}")
+            return
 
         # Agrega la consulta recién registrada a la lista en memoria.
         self.consultas_no_reconocidas.append(consulta_info)
@@ -307,6 +418,7 @@ class AsistenteVirtual:
         # Imprime en consola información de registro para monitorear el funcionamiento.
         print("🚨 ALERTA DOCENTE - Nueva consulta no reconocida:")
         print(f"   Mensaje: {consulta}")
+        print(f"   Categoría: {categoria}")
         print(f"   Fecha: {consulta_info['fecha']} - Hora: {consulta_info['hora']}")
         print(f"   Total consultas pendientes: {len(self.consultas_no_reconocidas)}")
 
@@ -320,7 +432,7 @@ class AsistenteVirtual:
         # Establece el título de la ventana de alerta.
         ventana_alerta.title("🚨 Alerta Docente - Nueva Consulta")
         # Define el tamaño de la ventana de alerta.
-        ventana_alerta.geometry("500x300")
+        ventana_alerta.geometry("500x350")
         # Configura el color de fondo de la ventana de alerta.
         ventana_alerta.configure(bg="#fff3cd")
         # Indica que esta ventana es hija de la ventana principal.
@@ -348,6 +460,16 @@ class AsistenteVirtual:
         info_frame = tk.Frame(ventana_alerta, bg="#fff3cd")
         # Coloca el contenedor en la ventana de alerta, expandiéndolo.
         info_frame.pack(pady=10, padx=20, fill=tk.BOTH, expand=True)
+
+        # Muestra la categoría
+        categoria_label = self.obtener_label_categoria(consulta_info.get("categoria", "general"))
+        tk.Label(
+            info_frame,
+            text=f"📚 Categoría: {categoria_label}",
+            font=("Arial", 10, "bold"),
+            bg="#fff3cd",
+            fg="#856404"
+        ).pack(anchor=tk.W, pady=5)
 
         # Crea y muestra una etiqueta indicando que a continuación se verá la consulta del estudiante.
         tk.Label(
@@ -412,6 +534,27 @@ class AsistenteVirtual:
         # Coloca el botón de cierre al lado del botón anterior.
         btn_cerrar.pack(side=tk.LEFT, padx=5)
 
+    def obtener_label_categoria(self, categoria):
+        """Obtener el label legible de una categoría"""
+        labels = {
+            'matematicas': 'Matemáticas',
+            'ciencias': 'Ciencias',
+            'historia': 'Historia',
+            'lengua': 'Lengua y Literatura',
+            'ingles': 'Inglés',
+            'geografia': 'Geografía',
+            'educacion_fisica': 'Educación Física',
+            'arte': 'Arte',
+            'musica': 'Música',
+            'filosofia': 'Filosofía',
+            'consejos_estudio': 'Consejos de Estudio',
+            'examenes': 'Exámenes',
+            'tiempo': 'Organización del Tiempo',
+            'motivacion': 'Motivación',
+            'general': 'General'
+        }
+        return labels.get(categoria, 'General')
+
     # Método que construye y muestra el panel docente completo con la lista de consultas pendientes.
     def abrir_panel_docente(self):
         """Abrir panel de administración para docentes"""
@@ -420,7 +563,7 @@ class AsistenteVirtual:
         # Establece el título de la ventana del panel docente.
         ventana_docente.title("👨‍🏫 Panel Docente - Consultas Pendientes")
         # Define el tamaño de la ventana del panel docente.
-        ventana_docente.geometry("700x500")
+        ventana_docente.geometry("800x600")
         # Configura el color de fondo de la ventana del panel docente.
         ventana_docente.configure(bg="#f8f9fa")
 
@@ -454,8 +597,8 @@ class AsistenteVirtual:
         # Crea un cuadro de texto con barra de desplazamiento para mostrar las consultas.
         self.texto_consultas = scrolledtext.ScrolledText(
             consultas_frame,
-            width=80,
-            height=15,
+            width=90,
+            height=18,
             font=("Arial", 10),
             bg="white",
             fg="black"
@@ -471,11 +614,11 @@ class AsistenteVirtual:
         # Crea un botón para actualizar la lista de consultas con los datos más recientes de la BD.
         btn_actualizar = tk.Button(
             botones_frame,
-            text="🔄 Actualizar Lista",
+            text="🔄 Actualizar",
             font=("Arial", 10, "bold"),
             bg="#007bff",
             fg="white",
-            command=self.actualizar_lista_consultas
+            command=lambda: self.actualizar_lista_consultas()
         )
         # Coloca el botón de actualización en el panel de botones.
         btn_actualizar.pack(side=tk.LEFT, padx=5)
@@ -483,7 +626,7 @@ class AsistenteVirtual:
         # Crea un botón para marcar todas las consultas pendientes como resueltas.
         btn_marcar_todas = tk.Button(
             botones_frame,
-            text="✅ Marcar Todas como Resueltas",
+            text="✅ Marcar Todas",
             font=("Arial", 10, "bold"),
             bg="#28a745",
             fg="white",
@@ -492,10 +635,21 @@ class AsistenteVirtual:
         # Coloca el botón para marcar todas las consultas en el panel de botones.
         btn_marcar_todas.pack(side=tk.LEFT, padx=5)
 
+        # Crea un botón para ver todas las consultas organizadas por materia
+        btn_consultas_previas = tk.Button(
+            botones_frame,
+            text="📊 Consultas Previas",
+            font=("Arial", 10, "bold"),
+            bg="#9b59b6",
+            fg="white",
+            command=self.mostrar_consultas_previas
+        )
+        btn_consultas_previas.pack(side=tk.LEFT, padx=5)
+
         # Crea un botón para exportar las consultas a un archivo de texto externo.
         btn_exportar = tk.Button(
             botones_frame,
-            text="📄 Exportar Consultas",
+            text="📄 Exportar",
             font=("Arial", 10, "bold"),
             bg="#ffc107",
             fg="black",
@@ -529,16 +683,24 @@ class AsistenteVirtual:
                 f"📊 TOTAL DE CONSULTAS PENDIENTES: {len(self.consultas_no_reconocidas)}\n"
             )
             # Agrega una línea divisoria visual.
-            self.texto_consultas.insert(tk.END, "=" * 70 + "\n\n")
+            self.texto_consultas.insert(tk.END, "=" * 80 + "\n\n")
 
             # Recorre la lista de consultas y las va escribiendo una por una.
             for i, consulta in enumerate(self.consultas_no_reconocidas, 1):
                 # Inserta el número de consulta.
                 self.texto_consultas.insert(tk.END, f"🔸 CONSULTA #{i}\n")
+                # Inserta la categoría
+                categoria_label = self.obtener_label_categoria(consulta.get('categoria', 'general'))
+                self.texto_consultas.insert(tk.END, f"📚 Categoría: {categoria_label}\n")
                 # Inserta la fecha y hora de la consulta.
                 self.texto_consultas.insert(
                     tk.END,
                     f"📅 Fecha: {consulta['fecha']} - ⏰ Hora: {consulta['hora']}\n"
+                )
+                # Inserta el ID de la consulta
+                self.texto_consultas.insert(
+                    tk.END,
+                    f"🆔 ID: {consulta['id']}\n"
                 )
                 # Inserta el mensaje del estudiante.
                 self.texto_consultas.insert(
@@ -550,11 +712,128 @@ class AsistenteVirtual:
                     tk.END,
                     f"📊 Estado: {consulta['estado'].upper()}\n"
                 )
+
+                # Botones de acción para cada consulta
+                self.texto_consultas.insert(tk.END, "\n")
+
                 # Inserta una línea separadora entre consultas.
-                self.texto_consultas.insert(tk.END, "-" * 50 + "\n\n")
+                self.texto_consultas.insert(tk.END, "-" * 60 + "\n\n")
 
         # Vuelve a establecer el cuadro de texto como de solo lectura.
         self.texto_consultas.config(state=tk.DISABLED)
+
+    def mostrar_consultas_previas(self):
+        """Mostrar todas las consultas organizadas por materia"""
+        consultas = self.obtener_todas_consultas()
+
+        if not consultas:
+            messagebox.showinfo("Información", "No hay consultas registradas en el sistema.")
+            return
+
+        # Agrupar consultas por categoría
+        consultas_por_categoria = {}
+        for consulta in consultas:
+            categoria = consulta['categoria']
+            if categoria not in consultas_por_categoria:
+                consultas_por_categoria[categoria] = []
+            consultas_por_categoria[categoria].append(consulta)
+
+        # Crear ventana
+        ventana_previas = tk.Toplevel(self.ventana)
+        ventana_previas.title("📊 Consultas Previas por Materia")
+        ventana_previas.geometry("900x700")
+        ventana_previas.configure(bg="#f8f9fa")
+
+        # Título
+        titulo = tk.Label(
+            ventana_previas,
+            text="📊 Todas las Consultas por Materia",
+            font=("Arial", 16, "bold"),
+            bg="#f8f9fa",
+            fg="#2c3e50"
+        )
+        titulo.pack(pady=10)
+
+        # Estadísticas generales
+        total = len(consultas)
+        resueltas = sum(1 for c in consultas if c['estado'] == 'resuelta')
+        pendientes = sum(1 for c in consultas if c['estado'] == 'pendiente')
+
+        stats_frame = tk.Frame(ventana_previas, bg="#e9ecef", relief=tk.RIDGE, borderwidth=2)
+        stats_frame.pack(fill=tk.X, padx=20, pady=10)
+
+        stats_text = f"📈 Total: {total} | 📚 Materias: {len(consultas_por_categoria)} | ✅ Resueltas: {resueltas} | ⏳ Pendientes: {pendientes}"
+        tk.Label(
+            stats_frame,
+            text=stats_text,
+            font=("Arial", 11, "bold"),
+            bg="#e9ecef",
+            fg="#2c3e50"
+        ).pack(pady=10)
+
+        # Área con scroll para las consultas
+        texto_frame = tk.Frame(ventana_previas)
+        texto_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
+
+        texto_scroll = scrolledtext.ScrolledText(
+            texto_frame,
+            width=100,
+            height=30,
+            font=("Arial", 9),
+            bg="white",
+            fg="black"
+        )
+        texto_scroll.pack(fill=tk.BOTH, expand=True)
+
+        # Ordenar categorías por cantidad de consultas
+        categorias_ordenadas = sorted(
+            consultas_por_categoria.items(),
+            key=lambda x: len(x[1]),
+            reverse=True
+        )
+
+        # Mostrar consultas por categoría
+        for categoria, consultas_cat in categorias_ordenadas:
+            categoria_label = self.obtener_label_categoria(categoria)
+            total_cat = len(consultas_cat)
+            resueltas_cat = sum(1 for c in consultas_cat if c['estado'] == 'resuelta')
+            pendientes_cat = sum(1 for c in consultas_cat if c['estado'] == 'pendiente')
+
+            texto_scroll.insert(tk.END, "=" * 90 + "\n")
+            texto_scroll.insert(tk.END, f"📚 {categoria_label.upper()}\n", "categoria")
+            texto_scroll.insert(tk.END, f"Total: {total_cat} | ✅ Resueltas: {resueltas_cat} | ⏳ Pendientes: {pendientes_cat}\n")
+            texto_scroll.insert(tk.END, "=" * 90 + "\n\n")
+
+            for i, consulta in enumerate(consultas_cat, 1):
+                estado_emoji = "✅" if consulta['estado'] == 'resuelta' else "⏳"
+                texto_scroll.insert(tk.END, f"{estado_emoji} Consulta #{i}\n")
+                texto_scroll.insert(tk.END, f"📅 {consulta['fecha']} - {consulta['hora']}\n")
+                texto_scroll.insert(tk.END, f"🆔 ID: {consulta['id']}\n")
+                texto_scroll.insert(tk.END, f"📝 Consulta: \"{consulta['mensaje']}\"\n")
+
+                if consulta['respuesta_docente']:
+                    texto_scroll.insert(tk.END, f"👨‍🏫 Respuesta: \"{consulta['respuesta_docente']}\"\n")
+                    if consulta['fecha_respuesta']:
+                        texto_scroll.insert(tk.END, f"📅 Respondida: {consulta['fecha_respuesta']}\n")
+
+                texto_scroll.insert(tk.END, "-" * 70 + "\n\n")
+
+            texto_scroll.insert(tk.END, "\n")
+
+        # Configurar tags para formato
+        texto_scroll.tag_config("categoria", font=("Arial", 11, "bold"), foreground="#e74c3c")
+        texto_scroll.config(state=tk.DISABLED)
+
+        # Botón de cerrar
+        btn_cerrar = tk.Button(
+            ventana_previas,
+            text="Cerrar",
+            font=("Arial", 11, "bold"),
+            bg="#6c757d",
+            fg="white",
+            command=ventana_previas.destroy
+        )
+        btn_cerrar.pack(pady=10)
 
     # Método que marca todas las consultas con estado "pendiente" como "resuelta" en la base de datos.
     def marcar_todas_resueltas(self):
@@ -584,9 +863,10 @@ class AsistenteVirtual:
                     # Actualiza el campo estado de todas las consultas pendientes a "resuelta".
                     self.cursor.execute("""
                         UPDATE consultas_pendientes
-                        SET estado = 'resuelta'
+                        SET estado = 'resuelta',
+                            fecha_respuesta = ?
                         WHERE estado = 'pendiente'
-                    """)
+                    """, (datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"),))
                     # Confirma los cambios en la base de datos.
                     self.conn.commit()
 
@@ -609,12 +889,12 @@ class AsistenteVirtual:
 
     # Método que exporta las consultas pendientes a un archivo de texto externo.
     def exportar_consultas(self):
-        """Exportar consultas pendientes a un archivo de texto desde la BD"""
-        # Asegura que la lista en memoria esté actualizada con el estado actual de la BD.
-        self.cargar_consultas_pendientes()
+        """Exportar todas las consultas a un archivo de texto desde la BD"""
+        # Obtiene todas las consultas
+        consultas = self.obtener_todas_consultas()
 
         # Verifica si la lista está vacía.
-        if not self.consultas_no_reconocidas:
+        if not consultas:
             # Informa al usuario que no hay datos para exportar.
             messagebox.showinfo("Información", "No hay consultas para exportar.")
             return
@@ -627,26 +907,33 @@ class AsistenteVirtual:
             # Abre el archivo en modo escritura con codificación UTF-8.
             with open(nombre_archivo, 'w', encoding='utf-8') as archivo:
                 # Escribe un encabezado general en el archivo.
-                archivo.write("REPORTE DE CONSULTAS PENDIENTES\n")
+                archivo.write("REPORTE DE CONSULTAS\n")
                 archivo.write("=" * 50 + "\n\n")
                 # Escribe la fecha y hora de generación del reporte.
                 archivo.write(
                     f"Fecha de exportación: "
                     f"{datetime.datetime.now().strftime('%d/%m/%Y %H:%M:%S')}\n"
                 )
-                # Escribe el total de consultas pendientes incluidas en el reporte.
+                # Escribe el total de consultas incluidas en el reporte.
                 archivo.write(
-                    f"Total de consultas: {len(self.consultas_no_reconocidas)}\n\n"
+                    f"Total de consultas: {len(consultas)}\n\n"
                 )
 
-                # Recorre cada consulta pendiente y la vuelca en el archivo de texto.
-                for i, consulta in enumerate(self.consultas_no_reconocidas, 1):
+                # Recorre cada consulta y la vuelca en el archivo de texto.
+                for i, consulta in enumerate(consultas, 1):
                     archivo.write(f"CONSULTA #{i}\n")
                     archivo.write(
                         f"Fecha: {consulta['fecha']} - Hora: {consulta['hora']}\n"
                     )
+                    if consulta['categoria']:
+                        categoria_label = self.obtener_label_categoria(consulta['categoria'])
+                        archivo.write(f"Categoría: {categoria_label}\n")
                     archivo.write(f"Mensaje: \"{consulta['mensaje']}\"\n")
-                    archivo.write(f"Estado: {consulta['estado']}\n")
+                    archivo.write(f"Estado: {consulta['estado'].upper()}\n")
+                    if consulta['respuesta_docente']:
+                        archivo.write(f"Respuesta del docente: \"{consulta['respuesta_docente']}\"\n")
+                        if consulta['fecha_respuesta']:
+                            archivo.write(f"Fecha respuesta: {consulta['fecha_respuesta']}\n")
                     archivo.write("-" * 30 + "\n\n")
 
             # Informa al usuario que el archivo se generó correctamente.
@@ -690,7 +977,7 @@ class AsistenteVirtual:
         self.area_chat = scrolledtext.ScrolledText(
             self.ventana,
             width=80,
-            height=20,
+            height=15,
             font=("Arial", 10),
             bg="white",
             fg="black",
@@ -735,12 +1022,20 @@ class AsistenteVirtual:
 
         # Define una lista de botones de ayuda rápida, cada uno con un texto visible y un comando asociado.
         botones_ayuda = [
-            ("📚 Consejos de Estudio", "consejos de estudio"),
-            ("💪 Motivación", "necesito motivación"),
             ("🔢 Matemáticas", "ayuda con matemáticas"),
             ("🧪 Ciencias", "ayuda con ciencias"),
+            ("🏛️ Historia", "ayuda con historia"),
             ("📖 Lengua", "ayuda con lengua"),
-            ("🌍 Geografía", "ayuda con geografía")
+            ("🌐 Inglés", "ayuda con inglés"),
+            ("🌍 Geografía", "ayuda con geografía"),
+            ("🏃 Ed. Física", "ayuda con educación física"),
+            ("🎨 Arte", "ayuda con arte"),
+            ("🎵 Música", "ayuda con música"),
+            ("🤔 Filosofía", "ayuda con filosofía"),
+            ("📚 Consejos", "consejos de estudio"),
+            ("💪 Motivación", "necesito motivación"),
+            ("📝 Exámenes", "preparar exámenes"),
+            ("⏰ Tiempo", "organizar tiempo")
         ]
 
         # Recorre la lista de botones de ayuda rápida para crearlos dinámicamente.
@@ -755,11 +1050,11 @@ class AsistenteVirtual:
                 command=lambda cmd=comando: self.procesar_comando_rapido(cmd),
                 cursor="hand2"
             )
-            # Coloca cada botón en una cuadrícula de 3 columnas, ajustando su posición según el índice.
-            boton.grid(row=i // 3, column=i % 3, padx=2, pady=2, sticky="ew")
+            # Coloca cada botón en una cuadrícula de 5 columnas, ajustando su posición según el índice.
+            boton.grid(row=i // 5, column=i % 5, padx=2, pady=2, sticky="ew")
 
         # Configura cada columna del contenedor de botones para que se expanda proporcionalmente.
-        for i in range(3):
+        for i in range(5):
             frame_botones.columnconfigure(i, weight=1)
 
         # Define el texto del mensaje de bienvenida que se mostrará al iniciar el asistente.
@@ -767,8 +1062,10 @@ class AsistenteVirtual:
             "¡Hola! Soy tu asistente virtual educativo. Estoy aquí para ayudarte con tus estudios.\n\n"
             "Puedes preguntarme sobre:\n"
             "• Matemáticas, Ciencias, Historia, Lengua, Inglés, Geografía\n"
+            "• Educación Física, Arte, Música, Filosofía\n"
             "• Consejos de estudio y técnicas de aprendizaje\n"
             "• Preparación de exámenes\n"
+            "• Organización del tiempo\n"
             "• Motivación y apoyo académico\n\n"
             "Si tu consulta no está en mi base de conocimientos, "
             "será enviada automáticamente a un docente para que te ayude.\n\n"
@@ -866,7 +1163,8 @@ class AsistenteVirtual:
                 "Puedo ayudarte con estas materias:\n\n"
                 "📚 Materias principales:\n"
                 "• Matemáticas • Ciencias (Biología, Química, Física)\n"
-                "• Historia • Lengua y Literatura • Inglés • Geografía\n\n"
+                "• Historia • Lengua y Literatura • Inglés • Geografía\n"
+                "• Educación Física • Arte • Música • Filosofía\n\n"
                 "🎯 Apoyo académico:\n"
                 "• Técnicas de estudio • Preparación de exámenes\n"
                 "• Organización del tiempo • Motivación\n\n"
@@ -888,8 +1186,10 @@ class AsistenteVirtual:
             )
 
         # Si ninguna condición anterior se cumple, se considera que la consulta no fue reconocida.
+        # Detecta la categoría del mensaje
+        categoria = self.detectar_categoria(mensaje)
         # En ese caso, se envía una alerta al docente con el contenido de la consulta.
-        self.enviar_alerta_docente(mensaje)
+        self.enviar_alerta_docente(mensaje, categoria)
 
         # Devuelve al estudiante un mensaje informando que su consulta será evaluada por un docente.
         return (
