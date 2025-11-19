@@ -5,7 +5,7 @@ const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
-export async function guardarConsultaPendiente(mensaje, fecha, hora) {
+export async function guardarConsultaPendiente(mensaje, fecha, hora, categoria = null) {
     try {
         const { data, error } = await supabase
             .from('consultas_pendientes')
@@ -13,7 +13,8 @@ export async function guardarConsultaPendiente(mensaje, fecha, hora) {
                 {
                     mensaje: mensaje,
                     fecha_hora: new Date().toISOString(),
-                    estado: 'pendiente'
+                    estado: 'pendiente',
+                    categoria: categoria
                 }
             ])
             .select();
@@ -165,6 +166,9 @@ export async function exportarConsultas() {
         data.forEach((consulta, index) => {
             contenido += `CONSULTA #${index + 1}\n`;
             contenido += `Fecha: ${new Date(consulta.fecha_hora).toLocaleString('es-ES')}\n`;
+            if (consulta.categoria) {
+                contenido += `Categoría: ${consulta.categoria.toUpperCase()}\n`;
+            }
             contenido += `Mensaje: "${consulta.mensaje}"\n`;
             contenido += `Estado: ${consulta.estado.toUpperCase()}\n`;
             if (consulta.respuesta_docente) {

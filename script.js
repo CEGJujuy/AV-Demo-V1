@@ -408,19 +408,20 @@ class AsistenteVirtual {
     }
 
     // Función para enviar alerta al docente
-    async enviarAlertaDocente(consulta) {
+    async enviarAlertaDocente(consulta, categoriaDetectada = null) {
         const fecha = new Date().toLocaleDateString('es-ES');
         const hora = this.obtenerHora();
 
         const consultaInfo = {
             mensaje: consulta,
             fecha: fecha,
-            hora: hora
+            hora: hora,
+            categoria: categoriaDetectada || 'general'
         };
 
         this.consultasNoReconocidas.push(consultaInfo);
 
-        const resultado = await guardarConsultaPendiente(consulta, fecha, hora);
+        const resultado = await guardarConsultaPendiente(consulta, fecha, hora, categoriaDetectada || 'general');
 
         if (resultado.success) {
             console.log('✅ Consulta guardada en Supabase:', resultado.data);
@@ -428,7 +429,7 @@ class AsistenteVirtual {
             console.error('❌ Error al guardar consulta en Supabase:', resultado.error);
         }
 
-        await guardarMensajeHistorial(consulta, 'usuario', null, false);
+        await guardarMensajeHistorial(consulta, 'usuario', categoriaDetectada, false);
 
         console.log('🚨 ALERTA DOCENTE - Nueva consulta no reconocida:', consultaInfo);
     }
@@ -522,8 +523,17 @@ Matemáticas, Ciencias, Historia, Lengua, Inglés, Geografía, Arte, Música, Ed
         }
 
         // Si llegamos aquí, la consulta no fue reconocida
-        // Enviar alerta al docente
-        await this.enviarAlertaDocente(mensaje);
+        // Intentar detectar categoría aunque no tengamos respuesta exacta
+        let categoriaDetectada = null;
+        for (const [palabraClave, categoria] of Object.entries(this.palabrasClave)) {
+            if (mensajeLower.includes(palabraClave)) {
+                categoriaDetectada = categoria;
+                break;
+            }
+        }
+
+        // Enviar alerta al docente con la categoría detectada
+        await this.enviarAlertaDocente(mensaje, categoriaDetectada);
 
         // Devolver mensaje de alerta al estudiante
         return `🔔 **Tu consulta será evaluada por un Docente**
