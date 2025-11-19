@@ -1,25 +1,14 @@
 // Importar la función createClient del paquete de Supabase para crear una instancia del cliente
 import { createClient } from '@supabase/supabase-js';
+import { config } from './config.js';
 
-// Obtener la URL y la clave anónima de Supabase desde las variables de entorno
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Obtener la URL y la clave anónima de Supabase desde la configuración
+const supabaseUrl = config.supabaseUrl;
+const supabaseKey = config.supabaseKey;
 
-// Validar que las variables de entorno existan
-if (!supabaseUrl || !supabaseKey) {
-    console.error('❌ ERROR: Variables de entorno de Supabase no configuradas');
-    console.error('VITE_SUPABASE_URL:', supabaseUrl);
-    console.error('VITE_SUPABASE_ANON_KEY:', supabaseKey ? 'Configurada' : 'No configurada');
-    console.error('\n⚠️  SOLUCIÓN: Verifica que el archivo .env tenga las variables correctas');
-    console.error('   Si acabas de modificar el .env, reinicia el servidor de desarrollo\n');
-    throw new Error('Las variables de entorno de Supabase no están configuradas. Por favor verifica el archivo .env');
-}
-
-// Log de confirmación (solo mostrar los primeros caracteres por seguridad)
+// Log de confirmación
 console.log('✅ Supabase configurado correctamente');
 console.log('URL:', supabaseUrl);
-console.log('\n⚠️  NOTA IMPORTANTE: Si las variables de entorno se cargaron pero el token JWT está expirado,');
-console.log('   las consultas a la base de datos fallarán. Verifica que tu token JWT de Supabase sea válido.\n');
 
 // Crear y exportar la instancia del cliente de Supabase usando la URL y la clave
 export const supabase = createClient(supabaseUrl, supabaseKey);
